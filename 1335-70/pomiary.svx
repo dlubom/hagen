@@ -1,0 +1,160 @@
+*begin kgw
+*title "Kälbergruben-Windloch (1335/70)"
+*export e1 e2 i
+*entrance e1
+*entrance e2
+*begin
+*date 1985.07.20
+*team "W. Klappacher"
+*team "H. Ager"
+*team "W. Waagner"
+*instrument compass "Suunto"
+*instrument clino "Suunto"
+*instrument tape "K50"
+*units tape metres
+*units compass clino grads
+*data normal from to tape clino compass
+
+; Karta 2 / Außenvermessung. I = kopczyk, E = E1, XIII = E2.
+*flags surface
+i       e1         2.6     0    283
+i       ii        19.3    11    208
+ii      iii       19.0    17    384
+iii     iv        13.5    37    334
+iv      v          4.3    36    370
+v       vi        14.2    37    348
+vi      vii        5.7    48    299
+vii     viii      10.2    60    320
+viii    ix        18.6    18    221
+ix      x         34.6    34    348
+x       xi        23.5    12    263
+xi      xii       22.2     6    283
+xii     e2        11.1   -25    147
+*flags not surface
+
+; Karta 3
+e2      1         28.4   -54    222
+e2      2         34.6   -40    207
+2       3          8.2   -62    210
+3       4        13.85   -63    183
+4       5         3.10    -8    163
+5       6         19.0    34    152
+4       7         23.2   -57    255
+7       8          8.3    21    393
+8       9          5.2   -80    375
+9       10         9.8   -23    371
+10      11         9.6   -12    320
+11      12        19.3     5    248
+12      13         8.9    13    172
+13      14        11.6    19    143
+14      15        14.1     4    206
+15      16         7.6     1    276
+16      17         9.9   -38    193
+17      18        23.9    -4    249
+18      19         3.6    27    283
+
+; Karta 4
+; 19–25 potwierdzają współrzędne. 29–24 to powrót do tej samej stacji.
+19      20        11.0    35    209
+20      21        23.5     7    259
+21      22         9.2    35    228
+21      23        19.6   -17      2
+23      24         7.8   -84    344
+19      25         7.0   -35    381
+25      26        15.2     2    316
+26      27        20.3   -12    328
+27      28       15.45   -14    168
+28      29         5.4     1    101
+29      24         6.7    38    183
+27      30         9.5    12    330
+30      31        15.6    -9    342
+31      32        13.7     4    288
+32      33        12.7    -3    263
+33      34        28.4    -2    341
+34      35        17.0    10    335
+35      36        13.6    -5    230
+36      37        12.2     4    342
+
+; Karta 5
+37      38         6.2   +20    290
+38      39        18.1   +23    318
+39      40         5.0   -32    362
+40      41         6.3   +21    333
+41      42         4.5    +8    306
+42      43         5.5   +20    313
+43      44         6.8    +7    332
+44      45         5.0   +25    290
+45      46         1.2    +5    360
+46      47         5.6   +22    325
+47      48         5.4     0    363
+48      49         3.3   +10    317
+49      50         4.4    +7    303
+50      51        13.9   -18    345
+
+; Karta 6
+; 66a od stacji 64 ma własny numer, niezależny od 66 na karcie 7.
+36      52        14.3    +2    371
+52      53        24.7   +17    365
+53      54        16.3   +18    368
+54      55        7.15   +24    318
+55      56         7.9    +8    386
+56      57         5.1   +23    344
+57      58         7.9   +12     10
+58      59         5.7   +14    388
+59      60        16.3   +13    372
+60      61         4.6   +39    387
+61      62        10.1    +1     19
+62      63        13.6    -1    370
+63      64        15.3   -22    333
+64      65         6.2    -2    383
+64      66a       16.5    -4    106
+
+; Karta 7
+; 80–81 = pion w dół. Wiersz do 82 ma na karcie poprawiony początek 14.
+19      66         7.6   -37    387
+66      67         6.8    -8    360
+66      68         6.7   -17     41
+68      69        4.75   -21     95
+69      70         5.1   -14     54
+70      71         5.2    +8    191
+70      72         8.7   +17    363
+72      73        10.2    -2    367
+73      74        17.3     0    122
+74      75         4.6    -1     19
+75      76         5.6    -3    356
+76      77         8.0     0    329
+77      78         7.3    -9     40
+78      79        4.25   -22     30
+14      80        8.15    -5    148
+80      81         6.4  DOWN      -
+14      82         8.1     0    197
+82      83        28.5   +55    337
+
+*end
+
+; Anschluss bei 65. Karta 1 (czarny atrament), osobny szkic i arkusz
+; obliczeń Waagnera z 8.10.1985. Data widnieje przy dokumentacji.
+; Rachunek składowych wskazuje na stopnie zarówno dla azymutu, jak i upadu.
+; Źródłowe 373 na odcinku 4–2 to 13 stopni po redukcji modulo 360.
+*begin oct
+*export 6
+*team "W. Waagner"
+*data normal from to tape clino compass
+*date 1985.10.08
+*units compass clino degrees
+; from    to        tape clino compass
+6       4          3.8   -10    266
+4       2          7.9    +7     13
+2       1         14.8    +8    344
+2       3          8.3   +23     18
+4       5          7.5   -20    130
+*end oct
+
+*begin
+*team "W. Waagner"
+*data normal from to tape clino compass
+*date 1985.10.08
+*units compass clino degrees
+65 oct.6 3.70 -41 287
+*end
+*end kgw

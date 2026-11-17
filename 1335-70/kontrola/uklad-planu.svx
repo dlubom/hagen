@@ -1,0 +1,4 @@
+*title "Kälbergruben-Windloch — lokalny układ arkusza Waagnera"
+; Historyczna redukcja bez korekt magnetycznych, I = 0,0,0.
+*fix kgw.i 0 0 0
+*include ../pomiary
