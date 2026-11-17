@@ -1,0 +1,2 @@
+# Oryginalny eksport GPX zawiera CRLF i spacje na końcach wierszy.
+mapa/zrodla/*.gpx -text -whitespace
