@@ -1,6 +1,6 @@
 # Gdzie na planie mieści się ciąg 49,45 m?
 
-Najlepiej z rysunkiem korytarzy zgadza się położenie **stacji lokalnej 2 u wylotu bocznej odnogi przy południowym brzegu Große Halle, obok Dohlenschacht**. Od kopczyka I trzeba na planie odmierzyć około **87 m na zachód i 27 m na południe**. To miejsce można wskazać na rysunku. Do połączenia obu pomiarów w Survex brakuje wspólnej stacji i wysokości. [Plansza z dwoma położeniami](lokalny-na-planie.jpg) · [Interaktywna nakładka](lokalny-na-planie.html)
+Jedno z możliwych położeń wypada przy **bocznej odnodze na południowym brzegu Große Halle, obok Dohlenschacht**. Stacja lokalna 2 leżałaby około **87 m na zachód i 27 m na południe od kopczyka I**. Kształt osi pasuje do rozwidlenia, lecz karta podaje zaledwie 1 m szerokości przy odcinku 1–2. W tym położeniu zewnętrzny obrys ma 23,4 m lub 17,9 m, zależnie od końca odcinka. Plan opisuje położoną poniżej *Eiskapelle*. Poziom i wspólna stacja pozostają nieustalone. [Test wymiarów i nazwanego kanionu](audyt-pomiarow.md) · [Plansza z dwoma położeniami](lokalny-na-planie.jpg) · [Interaktywna nakładka](lokalny-na-planie.html)
 
 ## Co przemawia za rozwidleniem
 

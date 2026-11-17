@@ -1,6 +1,6 @@
 karta	wiersz	seria	od	do	lewo_m	gora_m	dol_m	prawo_m	uwagi
 1	1	local	0	1	5	4	2	6	
-1	2	local	1	2	1	[nieczytelne]	1	0	W polu widoczny jest zapis bez pewnego odczytu.
+1	2	local	1	2	1	[nieczytelne]	1	0	Pole ↑ nieczytelne. Po prawej stronie wiersza widoczny jest słabo czytelny dopisek.
 1	3	local	2	c					
 1	4	local	c	b					
 1	5	local	b	a					
@@ -56,8 +56,8 @@ karta	wiersz	seria	od	do	lewo_m	gora_m	dol_m	prawo_m	uwagi
 5	10	main	46	47	1 (?)	0.3 (?)	0.5	1 (?)	Bardzo słaby zapis tych trzech pól.
 5	11	main	47	48	0.4	0 (?)	0.3	0.4	Zapis niewyraźny lub poprawiany.
 5	12	main	48	49	0.8	[nieczytelne]	0.6	0.2	Możliwe 0,1 lub znak graficzny.
-5	13	main	49	50					
-5	14	main	50	51	1	?	2	0.5	
+5	13	main	49	50					Schluf
+5	14	main	50	51	1	?	2	0.5	Kluft
 6	1	main	36	52	2	1	0.7	1	
 6	2	main	52	53	0.6	1.5	2	1	
 6	3	main	53	54	1	0.7	0.3	2	

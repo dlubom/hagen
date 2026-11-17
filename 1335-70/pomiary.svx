@@ -134,7 +134,9 @@ e2      2         34.6   -40    207
 
 ; Anschluss bei 65. Karta 1 (czarny atrament), osobny szkic i arkusz
 ; obliczeń Waagnera z 8.10.1985. Data widnieje przy dokumentacji.
-; Rachunek składowych wskazuje na stopnie zarówno dla azymutu, jak i upadu.
+; Stopnie odtwarzają wszystkie składowe w arkuszu. W stopce ukośnie oznaczono
+; pola ±90° i 360°, a pola gradowe są bez kreski. Jednostka użyta w terenie
+; pozostaje niepewna. Porównanie obu wariantów: kontrola/audyt-pomiarow.md.
 ; Źródłowe 373 na odcinku 4–2 to 13 stopni po redukcji modulo 360.
 *begin oct
 *export 6
