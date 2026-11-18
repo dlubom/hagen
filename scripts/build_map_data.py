@@ -342,6 +342,23 @@ def plan_layers(output, model_path):
         cv2.imread(str(CAVE / "zrodla/plan-1-500.jpg"), cv2.IMREAD_GRAYSCALE),
         cv2.ROTATE_90_COUNTERCLOCKWISE,
     )
+    if main.shape == (1848, 4000):
+        # Matching features in the two photographs align the new frame to the
+        # 2000 × 924 image used for the grid and outline calibration.
+        calibration_to_photo = np.array(
+            [
+                [1.988336605, -0.02184505426, 32.38984962],
+                [0.007789150842, 1.980894015, 16.12955638],
+                [3.79151692e-7, -7.281799086e-6, 1.0],
+            ]
+        )
+        main = cv2.warpPerspective(
+            main,
+            calibration_to_photo,
+            (2000, 924),
+            flags=cv2.INTER_LINEAR | cv2.WARP_INVERSE_MAP,
+            borderMode=cv2.BORDER_REPLICATE,
+        )
     book = cv2.imread(str(CAVE / "zrodla/hoehlenbuch/s-304.jpg"), cv2.IMREAD_GRAYSCALE)
     if main.shape != (924, 2000) or book.shape != (1600, 1200):
         raise ValueError("Zmieniła się geometria fotografii źródłowej.")
