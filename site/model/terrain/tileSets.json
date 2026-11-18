@@ -1,0 +1,17 @@
+[
+  {
+    "title": "BEV ALS DTM 1 m · Hagengebirge",
+    "subdirectory": "/dtm",
+    "minZoom": 16,
+    "maxZoom": 16,
+    "initialZoom": 17,
+    "overlayMaxZoom": 16,
+    "divisions": 256,
+    "dtmScale": 16,
+    "minX": 35158,
+    "maxX": 35159,
+    "minY": 22911,
+    "maxY": 22912,
+    "attributions": ["© BEV / Länder, ALS DTM 1 m (15.09.2024), CC BY 4.0. Siatka z interpolacji dwuliniowej." ]
+  }
+]

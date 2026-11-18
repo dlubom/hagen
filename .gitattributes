@@ -1,2 +1,6 @@
 # Oryginalny eksport GPX zawiera CRLF i spacje na końcach wierszy.
 mapa/zrodla/*.gpx -text -whitespace
+# Zachowaj pliki dystrybucyjne i licencje w oryginalnej postaci.
+site/map/vendor/leaflet/** -whitespace linguist-vendored
+site/assets/*-OFL.txt -whitespace
+site/model/CaveView-LICENSE.txt -whitespace

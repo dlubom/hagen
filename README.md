@@ -1,6 +1,8 @@
 # Hagengebirge · Kälbergruben-Windloch (1335/70)
 
-[Mapa HTML masywu i jaskini](mapa/index.html) · [Ciąg 49,45 m na planie](1335-70/kontrola/lokalny-na-planie.html) · [Höhlenbuch po polsku](1335-70/zrodla/hoehlenbuch/tlumaczenie-pl.md)
+[Model 3D z terenem](https://dlubom.github.io/hagen/#model) · [Mapa 2D z GPS i planami](https://dlubom.github.io/hagen/#mapa)
+
+[Mapa HTML masywu do pracy offline](mapa/index.html) · [Ciąg 49,45 m na planie](1335-70/kontrola/lokalny-na-planie.html) · [Höhlenbuch po polsku](1335-70/zrodla/hoehlenbuch/tlumaczenie-pl.md)
 
 [Audyt kart, jednostek i brakującego dowiązania](1335-70/kontrola/audyt-pomiarow.md) · [Model do otwarcia w Aven](hagen.3d) · [Poligon na planie archiwalnym](1335-70/kontrola/porownanie-planu.jpg) · [Profil W–E](1335-70/kontrola/profil-we.svg) · [16 wybranych przekrojów z dziennika](1335-70/kontrola/przekroje-polowe.jpg)
 
@@ -30,6 +32,15 @@ Przyjęto WGS84 dla podanych długości i szerokości geograficznych. Wysokości
 Punktem stałym jest dolny otwór. Górny pozostaje kontrolą zewnętrzną. Od dolnego otworu ciąg powierzchniowy daje przewyższenie **63,04 m**, a podane wysokości dają **68,00 m**. Model wyznacza górny otwór w 13,137261° E, 47,518084° N, około **3,70 m** od podanej pozycji w poziomie i **4,96 m niżej**. Na planie archiwalnym otwory opisano jako 1680 i 1743 m. W obliczeniach polowych punkt I, kopczyk przed wejściem, ma dopisek 1690 m. Do kontroli archiwalnej jego rzędną lokalną przyjęto jako zero.
 
 ## Mapa masywu i jaskini
+
+Na [GitHub Pages](https://dlubom.github.io/hagen/) zakładka **Model 3D** pokazuje poligon Survex w CaveView na tle terenu z austriackiego skanowania laserowego BEV. Można zmieniać krycie terenu oraz przełączać odcinki podziemne i powierzchniowe. W zakładce **Mapa 2D** można nałożyć plan 1:500 lub rycinę z 1963 r. na mapę z poziomicami albo ortofotomapę. Kliknięcie otworu pokazuje podane współrzędne, rekord GPX i położenie obliczone przez Survex. Opis dopasowania znajduje się przy każdym planie.
+
+GitHub Actions po zmianie na `main` kompiluje `hagen.svx`, generuje warstwy mapy z tego samego modelu, GPX i fotografii planów oraz publikuje całość. Do lokalnego podglądu potrzebne są Survex 1.4.24, PROJ (`cs2cs`), Python z NumPy i OpenCV oraz `curl` do pobrania CaveView.
+
+```sh
+python3 scripts/build_pages.py
+python3 -m http.server --directory build/pages 8000
+```
 
 [Otwórz mapę HTML](mapa/index.html) w przeglądarce. Plik działa offline i zawiera cieniowaną rzeźbę terenu z poziomicami, wszystkie 1063 punkty i 11 śladów z GPX (2762 wierzchołki) oraz główny poligon Survex. Widok jaskini pokazuje otwory, przebieg pod ziemią i ciąg powierzchniowy. Znaczniki otworów pozwalają porównać współrzędne podane przez użytkownika, rekordy GPX i wynik kompilacji.
 

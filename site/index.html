@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#faf9f5">
+  <meta name="description" content="Kälbergruben-Windloch w Hagengebirge. Model Survex z terenem i mapa archiwalnych planów, otworów oraz pomiarów GPS.">
+  <title>Kälbergruben-Windloch · Hagengebirge</title>
+  <link rel="icon" href="assets/poligon.png">
+  <link rel="stylesheet" href="atlas.css">
+  <script src="atlas.js" defer></script>
+</head>
+<body>
+  <header>
+    <div class="identity">
+      <img src="assets/poligon.png" width="48" height="48" alt="">
+      <div>
+        <p class="catalog">Hagengebirge <span aria-hidden="true">/</span> 1335/70</p>
+        <h1>Kälbergruben-Windloch</h1>
+      </div>
+    </div>
+    <div class="tabs" role="tablist" aria-label="Widok jaskini">
+      <a id="tab-model" role="tab" href="#model" aria-controls="panel-model" aria-selected="true">Model 3D</a>
+      <a id="tab-mapa" role="tab" href="#mapa" aria-controls="panel-mapa" aria-selected="false" tabindex="-1">Mapa 2D</a>
+    </div>
+    <a class="source" href="https://github.com/dlubom/hagen#readme" target="_blank" rel="noopener">Źródła <span aria-hidden="true">↗</span></a>
+  </header>
+  <main>
+    <section id="panel-model" role="tabpanel" aria-labelledby="tab-model" data-page="model/" data-title="Interaktywny model Survex z terenem"></section>
+    <section id="panel-mapa" role="tabpanel" aria-labelledby="tab-mapa" data-page="map/" data-title="Mapa GPS, poligonu i planów jaskini" hidden></section>
+    <noscript>Włącz JavaScript, aby wyświetlić model i mapę. <a href="model/hagen.3d" download>Pobierz model do Aven (.3d)</a>.</noscript>
+  </main>
+</body>
+</html>

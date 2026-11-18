@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Model 3D · Kälbergruben-Windloch</title>
+  <link rel="icon" href="../assets/poligon.png">
+  <link rel="stylesheet" href="CaveView/css/caveview.css">
+  <link rel="stylesheet" href="model.css">
+  <script src="CaveView/js/CaveView2.js" defer></script>
+  <script src="model.js" defer></script>
+</head>
+<body>
+  <main id="viewer" class="cv-container" tabindex="0" aria-label="Model 3D jaskini i terenu. Użyj strzałek, aby obrócić widok."></main>
+  <details id="layers" class="card">
+    <summary>Warstwy modelu</summary>
+    <fieldset id="settings" disabled>
+      <label><input id="centreline" type="checkbox" checked> <span class="key underground"></span> Poligon podziemny</label>
+      <label><input id="surface" type="checkbox" checked> <span class="key surface"></span> Ciąg powierzchniowy</label>
+      <label><input id="labels" type="checkbox"> Numery stacji</label>
+      <label><input id="terrain" type="checkbox" checked> Model terenu</label>
+      <label for="opacity" class="range-label">Krycie terenu <output id="value" for="opacity">60%</output></label>
+      <input id="opacity" type="range" min="0" max="100" value="60" aria-label="Krycie terenu">
+    </fieldset>
+  </details>
+  <div class="tools card" aria-label="Sterowanie kamerą">
+    <button id="closer" aria-label="Przybliż" title="Przybliż">+</button>
+    <button id="farther" aria-label="Oddal" title="Oddal">−</button>
+    <button id="home" aria-label="Widok początkowy" title="Widok początkowy">⌂</button>
+  </div>
+  <div id="message" role="status" class="card">Wczytywanie modelu…</div>
+  <div class="foot">
+    <span class="gestures">Przeciągnij, aby obrócić · przewiń, aby przybliżyć</span>
+    <details class="credit card">
+      <summary>© BEV / Länder · CaveView</summary>
+      <div class="sources">
+        <p>Teren pochodzi ze skanowania laserowego BEV. Raster 1 m z 15.09.2024 przepróbkowano do siatki ok. 1,6 m. Wysokości terenu odnoszą się do EVRF2000 Austria. Układ wysokości podanych dla otworów pozostaje nieustalony.</p>
+        <p><a href="https://doi.org/10.48677/862ca538-c597-4c30-8bad-94dd281ef15b" target="_blank" rel="noopener">BEV ALS DTM</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a></p>
+        <p><a href="https://github.com/aardgoose/CaveView.js/releases/tag/2.9.0" target="_blank" rel="noopener">CaveView 2.9.0</a> · <a href="CaveView-LICENSE.txt">MIT</a> · <a href="https://github.com/dlubom/Jaskiniowy-Kataster-Tatr-Zachodnich/blob/9baecd266e60f31d74bb5f8d6a16bad6af73ec5b/web/lang-pl.json" target="_blank" rel="noopener">Polskie tłumaczenie JKTZ</a> (<a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>)</p>
+        <p><a href="hagen.3d" download>Pobierz model Survex (.3d)</a></p>
+      </div>
+    </details>
+  </div>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kälbergruben-Windloch · Mapa</title>
+  <link rel="icon" href="../assets/poligon.png">
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+  <link rel="stylesheet" href="map.css">
+  <script defer src="vendor/leaflet/leaflet.js"></script>
+  <script defer src="map.js"></script>
+</head>
+<body>
+  <main id="map" aria-label="Mapa jaskini i masywu. Przesuwaj strzałkami i zmieniaj skalę klawiszami plus i minus."></main>
+  <aside class="dock" aria-label="Ustawienia mapy">
+    <button id="layers-button" type="button" aria-expanded="false" aria-controls="layers">
+      <span class="layer-icon" aria-hidden="true">▱</span> Warstwy <span class="chevron" aria-hidden="true"></span>
+    </button>
+    <div id="layers" hidden>
+      <label class="section-label" for="basemap">Podkład</label>
+      <select id="basemap">
+        <option value="topo">Mapa z poziomicami</option>
+        <option value="ortho">Ortofotomapa Austrii</option>
+        <option value="none">Bez podkładu</option>
+      </select>
+      <label class="section-label" for="plan">Plan jaskini</label>
+      <select id="plan"><option value="">Bez planu</option></select>
+      <label class="range-label" for="opacity">Krycie planu <output id="opacity-value" for="opacity">90%</output></label>
+      <input type="range" min="0" max="100" value="90" id="opacity">
+      <details id="plan-info"><summary>Georeferencja i źródło</summary><p id="plan-note"></p><p id="plan-credit"></p></details>
+      <fieldset id="overlays"><legend>Dane pomiarowe</legend></fieldset>
+      <label class="section-label" for="search">Wyszukaj punkt GPX</label>
+      <input type="search" id="search" placeholder="Nazwa punktu…" autocomplete="off" aria-controls="matches">
+      <ul id="matches" hidden aria-label="Wyniki wyszukiwania"></ul>
+    </div>
+  </aside>
+  <nav class="extent" aria-label="Zasięg mapy">
+    <button type="button" id="cave">Jaskinia</button>
+    <button type="button" id="massif">Cały masyw</button>
+  </nav>
+  <div class="messages"><p role="status" id="status">Wczytywanie danych…</p><p role="status" id="tile-status" hidden></p></div>
+  <noscript>Do wyświetlenia mapy potrzebny jest JavaScript.</noscript>
+</body>
+</html>

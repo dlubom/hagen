@@ -39,8 +39,8 @@ def gpx_data():
     return waypoints, paths
 
 
-def cave_data():
-    dump = subprocess.check_output(["dump3d", "-l", ROOT / "hagen.3d"], text=True)
+def cave_data(model_path=ROOT / "hagen.3d"):
+    dump = subprocess.check_output(["dump3d", "-l", model_path], text=True)
     nodes = {}
     edges = []
     for line in dump.splitlines():
