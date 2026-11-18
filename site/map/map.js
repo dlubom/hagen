@@ -6,7 +6,12 @@ const dataRoot = new URL('./data/', document.baseURI);
 const layersButton = el('layers-button');
 const panel = el('layers');
 const colors = { underground: '#964159', surface: '#c77a15', synthetic: '#c11265', regional: '#286466', gps: '#166994', entrances: '#edba63' };
-const baseSpecs = { topo: ['bmapgrau', 'png'], ortho: ['bmaporthofoto30cm', 'jpeg'] };
+const baseSpecs = {
+  topo: { id: 'bmapgrau', format: 'png', style: 'normal', maxNativeZoom: 19 },
+  ortho: { id: 'bmaporthofoto30cm', format: 'jpeg', style: 'normal', maxNativeZoom: 19 },
+  relief: { id: 'bmapgelaende', format: 'jpeg', style: 'grau', maxNativeZoom: 17 }
+};
+const geoSphereAttribution = '© <a href="https://www.geosphere.at/">GeoSphere Austria</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>';
 let basemap, caveBounds, massifBounds;
 
 L.control.zoom({ position: 'bottomright', zoomInTitle: 'Przybliż', zoomOutTitle: 'Oddal' }).addTo(map);
@@ -37,14 +42,13 @@ function changeBasemap() {
   const options = { minZoom: 5, maxZoom: 23, noWrap: true };
   let tiles;
   if (selected === 'geology') {
-    const attribution = '© <a href="https://www.geosphere.at/">GeoSphere Austria</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>';
     tiles = [['karte_geofast_50', 16], ['karte_50', 15]].map(([series, maxNativeZoom]) =>
       L.tileLayer('https://gis.geosphere.at/images/rest/services/geologie/' + series + '/ImageServer/tile/{z}/{y}/{x}',
-        { ...options, maxNativeZoom, attribution }));
+        { ...options, maxNativeZoom, attribution: geoSphereAttribution }));
   } else {
-    const [id, format] = baseSpecs[selected];
-    tiles = [L.tileLayer('https://mapsneu.wien.gv.at/basemap/' + id + '/normal/google3857/{z}/{y}/{x}.' + format, {
-      ...options, maxNativeZoom: 19,
+    const { id, format, style, maxNativeZoom } = baseSpecs[selected];
+    tiles = [L.tileLayer(`https://mapsneu.wien.gv.at/basemap/${id}/${style}/google3857/{z}/{y}/{x}.${format}`, {
+      ...options, maxNativeZoom,
       attribution: 'Data source: <a href="https://basemap.at/">basemap.at</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>'
     })];
   }
@@ -64,6 +68,28 @@ function changeBasemap() {
 }
 el('basemap').addEventListener('change', changeBasemap);
 changeBasemap();
+
+function setFaults() {
+  const toggle = el('show-faults');
+  const status = el('faults-status');
+  const pane = map.createPane('faults');
+  pane.style.zIndex = 375;
+  pane.style.pointerEvents = 'none';
+  const faults = L.tileLayer.wms('https://catalog.geosphere.at/geoserver/ge_tectlines/wms', {
+    pane: 'faults', layers: 'GE.GeologicFault.50k', format: 'image/png', transparent: true,
+    tileSize: 512, minZoom: 5, maxZoom: 23, noWrap: true, attribution: geoSphereAttribution
+  });
+  faults.on('loading', () => { status.hidden = true; });
+  faults.on('tileerror', () => { status.hidden = !map.hasLayer(faults); });
+  function update() {
+    status.hidden = true;
+    if (toggle.checked) faults.addTo(map);
+    else map.removeLayer(faults);
+  }
+  toggle.addEventListener('change', update);
+  update();
+}
+setFaults();
 
 function frame(bounds, maxZoom = 19) {
   if (!bounds?.isValid() || !map.getSize().x || !map.getSize().y) return;
@@ -95,7 +121,7 @@ const number = (n, digits = 0) => n.toLocaleString('pl-PL', { maximumFractionDig
 const coord = ([lon, lat]) => lat.toFixed(6) + '° N, ' + lon.toFixed(6) + '° E';
 const popupOptions = { maxWidth: 340, minWidth: 160 };
 
-function setMeasurement() {
+function setMeasurement(stopRockLookup) {
   const button = el('measure');
   const section = el('measurement');
   const hint = el('measure-hint');
@@ -133,6 +159,7 @@ function setMeasurement() {
     button.textContent = active ? 'Zakończ pomiar' : 'Miarka';
     container.classList.toggle('is-measuring', active);
     if (active) {
+      stopRockLookup();
       reset();
       if (map.getSize().x < 800) panelOpen(false);
       map.closePopup();
@@ -163,13 +190,102 @@ function setMeasurement() {
     if (active) {
       setActive(false);
       button.focus();
-    } else if (!panel.hidden) {
+    } else if (!panel.hidden && !container.classList.contains('is-inspecting-rock')) {
       panelOpen(false);
       layersButton.focus();
     }
   });
+  return () => { if (active) setActive(false); };
 }
-setMeasurement();
+
+async function lookupRock({ lat, lng }, signal) {
+  const params = new URLSearchParams({
+    f: 'json', where: '1=1', geometry: `${lng.toFixed(7)},${lat.toFixed(7)}`,
+    geometryType: 'esriGeometryPoint', inSR: '4326', spatialRel: 'esriSpatialRelIntersects',
+    returnGeometry: 'false', outFields: 'LEGTEXT,BLATTNAME,DRUCK_ALIAS'
+  });
+  for (const service of ['karte_50_info', 'geofast_50_info']) {
+    const source = `https://gis.geosphere.at/maps/rest/services/geologie/${service}/MapServer/0`;
+    const response = await fetch(`${source}/query?${params}`, { signal });
+    if (!response.ok) throw Error(`GeoSphere Austria (${response.status})`);
+    const data = await response.json();
+    if (!Array.isArray(data.features)) throw Error('GeoSphere Austria: brak listy obiektów');
+    const units = data.features.map(({ attributes }) => attributes).filter((unit) => unit?.LEGTEXT?.trim());
+    if (units.length) return { units, source };
+  }
+  return { units: [] };
+}
+
+function setRockLookup(stopMeasurement) {
+  const button = el('rock-lookup');
+  const hint = el('rock-hint');
+  const container = map.getContainer();
+  const popup = L.popup({ ...popupOptions, maxHeight: 260 });
+  let active = false;
+  let request;
+
+  function setActive(inspecting) {
+    active = inspecting;
+    button.setAttribute('aria-pressed', String(active));
+    hint.hidden = !active;
+    container.classList.toggle('is-inspecting-rock', active);
+    if (active) {
+      stopMeasurement();
+      if (map.getSize().x < 800) panelOpen(false);
+      map.closePopup();
+    } else {
+      popup.remove();
+    }
+  }
+
+  popup.on('remove', () => request?.abort());
+  map.on('click', async ({ latlng }) => {
+    if (!active) return;
+    request?.abort();
+    const controller = new AbortController();
+    request = controller;
+    const content = element('div', '');
+    const result = element('div', 'Sprawdzam rodzaj skały…');
+    result.setAttribute('role', 'status');
+    content.append(element('h2', 'Geologia powierzchni'), result, element('small', coord([latlng.lng, latlng.lat])));
+    popup.setLatLng(latlng).setContent(content).openOn(map);
+
+    try {
+      const { units, source } = await lookupRock(latlng, controller.signal);
+      if (controller.signal.aborted) return;
+      if (units.length) {
+        result.replaceChildren();
+        for (const unit of units) {
+          const legend = [unit.BLATTNAME, unit.DRUCK_ALIAS && 'Poz. ' + unit.DRUCK_ALIAS].filter(Boolean).join(' · ');
+          result.append(element('p', unit.LEGTEXT), element('small', legend));
+        }
+        const link = element('a', 'GeoSphere Austria');
+        link.href = source;
+        link.target = '_blank';
+        link.rel = 'noopener';
+        const credit = element('small', '');
+        credit.append(link, document.createTextNode(' · CC BY 4.0'));
+        content.append(credit);
+      } else {
+        result.textContent = 'Brak danych o skale w tym punkcie.';
+      }
+    } catch (error) {
+      if (controller.signal.aborted) return;
+      result.textContent = 'Nie udało się odczytać geologii. Kliknij punkt ponownie.';
+    } finally {
+      if (!controller.signal.aborted) popup.update();
+    }
+  });
+  button.addEventListener('click', () => setActive(!active));
+  window.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape' || !active) return;
+    setActive(false);
+    button.focus();
+  });
+  return () => { if (active) setActive(false); };
+}
+const stopMeasurement = setMeasurement(() => stopRockLookup());
+const stopRockLookup = setRockLookup(stopMeasurement);
 
 function gpsPopup(feature) {
   const p = feature.properties;

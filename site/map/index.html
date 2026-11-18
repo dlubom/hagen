@@ -20,6 +20,7 @@
       <label class="section-label" for="basemap">Podkład</label>
       <select id="basemap">
         <option value="topo">Mapa z poziomicami</option>
+        <option value="relief">Rzeźba terenu</option>
         <option value="ortho">Ortofotomapa Austrii</option>
         <option value="geology">Mapa geologiczna 1:50 000</option>
         <option value="none">Bez podkładu</option>
@@ -33,6 +34,7 @@
           <li><a href="https://gis.geosphere.at/portal/sharing/rest/content/items/3737b2c4c1a74771b9b244844312367e/data" target="_blank" rel="noopener">125 · Bischofshofen</a></li>
         </ul>
       </details>
+      <label class="check"><input type="checkbox" id="show-faults"> Uskoki geologiczne 1:50 000</label>
       <label class="section-label" for="plan">Plany jaskiń</label>
       <select id="plan"><option value="">Bez planów</option></select>
       <label class="range-label" for="opacity">Krycie planu <output id="opacity-value" for="opacity">90%</output></label>
@@ -57,10 +59,13 @@
       <output id="measure-result"></output>
       <button type="button" id="measure-clear">Wyczyść</button>
     </section>
+    <button type="button" id="rock-lookup" aria-pressed="false" aria-controls="rock-hint">Odczyt skały</button>
+    <p id="rock-hint" role="status" hidden>Wskaż punkt na mapie.</p>
   </div>
   <div class="messages">
     <p role="status" id="status">Wczytywanie danych…</p>
     <p role="status" id="tile-status" hidden></p>
+    <p role="status" id="faults-status" hidden>Nie udało się wczytać części warstwy uskoków.</p>
     <p role="status" id="plan-status" hidden></p>
   </div>
   <noscript>Do wyświetlenia mapy potrzebny jest JavaScript.</noscript>

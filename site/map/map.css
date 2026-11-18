@@ -18,7 +18,7 @@ button:hover, summary:hover { color: #00725d; }
 [hidden] { display: none !important; }
 .dock, .map-tools, .messages { position: absolute; z-index: 800; }
 .dock { top: 14px; left: 14px; z-index: 801; max-width: calc(100% - 28px); }
-#layers-button, .extent, #layers, #measure, #measurement { background: var(--paper); box-shadow: var(--shadow); border: 1px solid #a7b4a7; border-radius: 6px; }
+#layers-button, .extent, #layers, #measure, #measurement, #rock-lookup, #rock-hint { background: var(--paper); box-shadow: var(--shadow); border: 1px solid #a7b4a7; border-radius: 6px; }
 #layers-button { display: flex; align-items: center; gap: 9px; min-height: 38px; padding: 6px 12px; font-size: 14px; font-weight: 650; }
 .layer-icon { position: relative; top: -2px; font: bold 22px/20px Arial,sans-serif; text-shadow: 0 3px var(--paper), 0 4.5px var(--green); }
 .chevron { width: 6px; height: 6px; margin-left: 6px; transform: rotate(45deg); border-right: 1.5px solid; border-bottom: 1.5px solid; }
@@ -49,18 +49,19 @@ legend { margin: 0 0 4px; padding: 0; }
 .map-tools { top: 14px; right: 14px; display: grid; justify-items: end; gap: 5px; pointer-events: none; }
 .map-tools > * { pointer-events: auto; }
 .extent { display: flex; overflow: hidden; }
-.extent button, #measure { min-height: 36px; padding: 6px 11px; font-size: 13px; font-weight: 620; }
+.extent button, #measure, #rock-lookup { min-height: 36px; padding: 6px 11px; font-size: 13px; font-weight: 620; }
 .extent button + button { border-left: 1px solid var(--line); }
 .extent button:focus-visible { outline-offset: -3px; }
 #measure:disabled, #measure-clear:disabled { opacity: .55; cursor: default; }
-#map.is-measuring ~ .map-tools #measure { background: var(--green); color: white; }
+#map.is-measuring ~ .map-tools #measure, #rock-lookup[aria-pressed=true] { background: var(--green); color: white; }
 #measurement { width: min(220px, calc(100vw - 28px)); padding: 9px 11px; font-size: 13px; }
 #measure-hint { margin: 0 0 5px; color: var(--muted); }
 #measure-result { display: block; margin-bottom: 5px; font-weight: 650; font-variant-numeric: tabular-nums; }
 #measure-clear { border: 1px solid var(--line); border-radius: 4px; min-height: 28px; padding: 3px 7px; }
-#map.is-measuring { cursor: crosshair; }
-#map.is-measuring .leaflet-overlay-pane canvas,
-#map.is-measuring .leaflet-marker-icon.leaflet-interactive { pointer-events: none; }
+#rock-hint { margin: 0; padding: 6px 10px; color: var(--muted); font-size: 13px; }
+#map:is(.is-measuring, .is-inspecting-rock) { cursor: crosshair; }
+#map:is(.is-measuring, .is-inspecting-rock) .leaflet-overlay-pane canvas,
+#map:is(.is-measuring, .is-inspecting-rock) .leaflet-marker-icon.leaflet-interactive { pointer-events: none; }
 .messages { bottom: 32px; right: 58px; max-width: min(360px, 70%); pointer-events: none; }
 .messages p, noscript { background: var(--paper); color: var(--green); border: 1px solid #b8c5b4; border-radius: 4px; padding: 7px 10px; font-size: 13px; line-height: 1.4; }
 noscript { position: absolute; z-index: 1000; top: 20%; left: 10%; }
@@ -83,6 +84,6 @@ noscript { position: absolute; z-index: 1000; top: 20%; left: 10%; }
   .dock { left: 8px; top: 8px; }
   .map-tools { right: 8px; top: 8px; }
   #layers { max-height: calc(100dvh - 56px); width: 232px; }
-  .extent button, #layers-button, #measure, #measure-clear { min-height: 40px; }
+  .extent button, #layers-button, #measure, #measure-clear, #rock-lookup { min-height: 40px; }
   .check { min-height: 32px; }
 }
