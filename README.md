@@ -39,6 +39,8 @@ Punktem stałym jest dolny otwór. Górny pozostaje kontrolą zewnętrzną. Od d
 
 Na [GitHub Pages](https://dlubom.github.io/hagen/) zakładka **Model 3D** pokazuje poligon Kälbergruben-Windloch w CaveView na tle terenu z austriackiego skanowania laserowego BEV. W panelu **Warstwy modelu** przycisk **Zbliż do łącznika** ustawia widok na bok między `kgw.2` i `local.4`. Można też zmieniać krycie terenu i przełączać poszczególne warstwy.
 
+Zakładka **LiDAR** pokazuje punkty gruntu SAGIS w kolorach ortofotomapy basemap.at. Widoki **Nad terenem** i **Pod terenem** pozwalają porównać powierzchnię z poligonem. Kafel obejmuje oba otwory i rzut całego poligonu Kälbergruben-Windloch. Potree-Next wymaga przeglądarki z WebGPU. [Źródła i kontrola chmury](1335-70/kontrola/lidar.md)
+
 W zakładce **Mapa 2D** wybór planu przenosi widok do jaskini. Kliknięcie przerywanego łącznika pokazuje jego końce, długość i założenie wysokości. Dostępne są plan 1:500 i rycina z 1963 r. dla Kälbergruben-Windloch oraz rzut Tantalhöhle (1335/30) narysowany przez W. Waagnera w 1979 r. Rzut Tantalhöhle dowiązano do punktu GPX `Tantalhohle_30` przy otworze opisanym na planie jako 1710 m. Skalę wyznacza drukowana siatka 500 m, a orientację kierunek od otworu do dawnego punktu 302 w Riesenhalle. W niezależnym punkcie kontrolnym 231 przy Seufzertreppe różnica wynosi 49 m. [Georeferencja Tantalhöhle i identyfikacja obu punktów](1335-30/georeferencja.md)
 
 W menu **Podkład** można wybrać mapę z poziomicami, ortofotomapę lub mapę geologiczną GeoSphere Austria 1:50 000. Lista **Ciągi jaskiń z h2026** przybliża wybraną jaskinię. Warstwa zawiera 9724 podziemne odcinki dla 60 obiektów. Kliknięcie ciągu pokazuje nazwę i liczbę odcinków. Aby odświeżyć warstwę z lokalnej kopii gałęzi `h2026`, uruchom `python3 scripts/import_h2026.py /ścieżka/do/test2`. [Źródłowy projekt Survex](https://github.com/dlubom/test2/tree/ec21231914280347e05cedd10d9e9aff55955d89)
@@ -47,8 +49,10 @@ GitHub Actions po zmianie na `main` kompiluje `hagen.svx`, generuje warstwy mapy
 
 ```sh
 python3 scripts/build_pages.py
-python3 -m http.server --directory build/pages 8000
+python3 scripts/serve_pages.py
 ```
+
+Podgląd atlasu działa pod `http://127.0.0.1:8000/#lidar`. Skrypt serwera obsługuje odczyt fragmentów plików binarnych przez Potree.
 
 [Mapa HTML do pracy offline](mapa/index.html) zawiera cieniowaną rzeźbę terenu z poziomicami, wszystkie 1063 punkty GPX, główny poligon Survex i ciągi jaskiń z h2026. Znaczniki otworów Kälbergruben-Windloch pozwalają porównać podane współrzędne, rekordy GPX i wynik kompilacji.
 

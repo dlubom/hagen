@@ -88,7 +88,7 @@ main { position: relative; min-height: 0; }
 [role="tabpanel"], iframe { height: 100%; width: 100%; }
 iframe { border: 0; display: block; }
 noscript { position: absolute; top: 1rem; left: 1rem; }
-@media (max-width: 620px) {
+@media (max-width: 720px) {
   header {
     display: grid;
     grid-template-columns: 1fr auto;

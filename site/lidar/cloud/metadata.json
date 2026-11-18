@@ -1,0 +1,94 @@
+{
+  "version": "2.0",
+  "name": "kalbergruben-windloch",
+  "description": "",
+  "points": 1941635,
+  "projection": "EPSG:32633",
+  "hierarchy": {
+    "firstChunkSize": 10054,
+    "stepSize": 4,
+    "depth": 6
+  },
+  "offset": [
+    359464.953,
+    5264028.063,
+    1400.202
+  ],
+  "scale": [
+    0.001,
+    0.001,
+    0.001
+  ],
+  "spacing": 4.9636328125002365,
+  "boundingBox": {
+    "min": [
+      359464.953,
+      5264028.063,
+      1400.202
+    ],
+    "max": [
+      360100.298,
+      5264663.408,
+      2035.5470000000303
+    ]
+  },
+  "encoding": "DEFAULT",
+  "attributes": [
+    {
+      "name": "position",
+      "description": "",
+      "size": 12,
+      "numElements": 3,
+      "elementSize": 4,
+      "type": "int32",
+      "min": [
+        359464.953,
+        5264028.063,
+        1400.202
+      ],
+      "max": [
+        360100.298,
+        5264540.991,
+        1988.893
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "offset": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "rgb",
+      "description": "",
+      "size": 6,
+      "numElements": 3,
+      "elementSize": 2,
+      "type": "uint16",
+      "min": [
+        3598,
+        4112,
+        0
+      ],
+      "max": [
+        60652,
+        59881,
+        60909
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "offset": [
+        0,
+        0,
+        0
+      ]
+    }
+  ]
+}

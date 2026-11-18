@@ -17,7 +17,9 @@ from tantal_plan import tantal_plan
 ROOT = Path(__file__).resolve().parents[1]
 CAVE = ROOT / "1335-70"
 sys.path.insert(0, str(ROOT / "mapa"))
-from odswiez import REGIONAL, cave_data, gpx_points  # noqa: E402 — shared with the offline map
+from odswiez import REGIONAL, cave_data, gpx_points, survey_records  # noqa: E402
+
+ENTRANCE_LABELS = {"kgw.e1": "Otwór dolny", "kgw.e2": "Otwór górny"}
 
 
 def write_json(path, data, indent=None):
@@ -39,6 +41,29 @@ def feature(geometry, coordinates, **properties):
         "type": "Feature",
         "geometry": {"type": geometry, "coordinates": coordinates},
         "properties": properties,
+    }
+
+
+def lidar_survey(model_path):
+    crs, nodes, legs = survey_records(model_path)
+    if crs != "EPSG:32633":
+        raise ValueError(f"Układ poligonu {crs} różni się od układu chmury EPSG:32633.")
+    stations = {name: list(map(float, xyz)) for xyz, name in nodes.items()}
+    segments = []
+    for start, end, surface, synthetic in legs:
+        if synthetic:
+            kind = "provisional"
+        else:
+            kind = "surface" if surface else "underground"
+        segments.append({"from": stations[start], "to": stations[end], "type": kind})
+    return {
+        "crs": crs,
+        "origin": [359500, 5264000, 1600],
+        "legs": segments,
+        "entrances": [
+            {"name": label, "position": stations[station]}
+            for station, label in ENTRANCE_LABELS.items()
+        ],
     }
 
 
@@ -68,7 +93,7 @@ def vectors(output, model_path, points):
                 },
             )
         )
-    for station, label in (("kgw.e1", "Otwór dolny"), ("kgw.e2", "Otwór górny")):
+    for station, label in ENTRANCE_LABELS.items():
         for kind, source in (("control", controls), ("model", stations)):
             lat, lon, ele = source[station]
             entrances.append(
@@ -423,6 +448,7 @@ def main():
         default=ROOT / "hagen.3d",
         help="Compiled georeferenced main Survex model",
     )
+    parser.add_argument("--lidar-survey", type=Path, help="Export the same survey in XYZ for Potree")
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=True)
     points = gpx_points()
@@ -430,6 +456,8 @@ def main():
     manifest["plans"] = plan_layers(args.output, args.model)
     manifest["plans"].append(tantal_plan(args.output, points, transform_coords))
     write_json(args.output / "map.json", manifest, 2)
+    if args.lidar_survey:
+        write_json(args.lidar_survey, lidar_survey(args.model))
 
 
 if __name__ == "__main__":

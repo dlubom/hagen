@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LiDAR · Kälbergruben-Windloch</title>
+  <link rel="icon" href="../assets/poligon.png">
+  <link rel="stylesheet" href="lidar.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "potree": "./vendor/src/Potree.js",
+        "lazperf": "./vendor/libs/laz-perf/laz-perf.js",
+        "toolbar": "./vendor/src/modules/toolbar/toolbar.js",
+        "sidebar": "./vendor/src/modules/sidebar/sidebar.js",
+        "dat.gui": "./vendor/libs/dat.gui/dat.gui.module.js",
+        "BinaryHeap": "./vendor/libs/BinaryHeap/BinaryHeap.js",
+        "tween": "./vendor/libs/tween/tween.esm.js",
+        "range-select": "./vendor/libs/range-select/RangeSelect.js",
+        "json5": "./vendor/libs/json5/json5.js",
+        "proj4": "./vendor/libs/proj4js/proj4-src.js",
+        "radix-sort-esm": "./vendor/libs/webgpu-radix-sort/dist/esm/radix-sort-esm.js"
+      }
+    }
+  </script>
+</head>
+<body>
+  <main aria-label="Widok LiDAR Kälbergruben-Windloch">
+    <canvas id="canvas" aria-label="Chmura punktów i poligon jaskini"></canvas>
+    <div id="entrances"></div>
+    <pre id="msg_dbg" hidden></pre>
+
+    <aside class="card controls" aria-label="Sterowanie widokiem">
+      <h1>Chmura punktów</h1>
+      <fieldset id="controls" disabled>
+        <legend class="sr-only">Widok LiDAR</legend>
+        <div class="views" aria-label="Położenie kamery">
+          <button type="button" id="above" aria-pressed="true">Nad terenem</button>
+          <button type="button" id="below" aria-pressed="false">Pod terenem</button>
+        </div>
+        <label class="coloring" for="coloring">Kolor punktów
+          <select id="coloring">
+            <option value="rgba">Ortofotomapa</option>
+            <option value="elevation">Wysokość</option>
+          </select>
+        </label>
+        <div id="height-scale" class="height-scale" hidden>
+          <span id="lowest"></span><span id="highest"></span>
+        </div>
+        <div class="layers" aria-label="Warstwy">
+          <label><input id="cloud-visible" type="checkbox" checked> Teren</label>
+          <label><input id="survey-visible" type="checkbox" checked> Poligon i otwory</label>
+        </div>
+      </fieldset>
+      <div id="status" role="status" data-state="loading">Ładowanie widoku 3D…</div>
+      <p id="error" role="alert" hidden></p>
+      <p id="alternate" hidden><a href="../#model" target="_top">Otwórz Model 3D</a></p>
+      <ul id="legend" aria-label="Legenda poligonu">
+        <li><span class="key underground"></span>Odcinki podziemne</li>
+        <li><span class="key surface"></span>Odcinki powierzchniowe</li>
+        <li><span class="key provisional"></span>Łącznik do weryfikacji</li>
+      </ul>
+    </aside>
+
+    <footer>
+      <span class="gestures">Obrót lewym przyciskiem · przesunięcie prawym · zbliżenie kółkiem</span>
+      <div class="card credits">
+        <a href="https://basemap.at/" target="_blank" rel="noopener">Datenquelle: basemap.at</a>
+        <details class="credit">
+          <summary>Dane i licencje</summary>
+          <div class="card sources">
+            <p>Oryginalne punkty gruntu SAGIS, arkusz 4427453, epoka 1.
+              <a href="https://data.salzburg.gv.at" target="_blank" rel="noopener">Datenquelle: Land Salzburg – data.salzburg.gv.at</a></p>
+            <p>Kolory przypisano do punktów z ortofotomapy basemap.at · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>. <a href="cloud/provenance.json" target="_blank" rel="noopener">Metadane źródeł</a></p>
+            <p>Wysokości chmury i poligonu pochodzą ze źródeł. Zgodność ich układów wysokości wymaga potwierdzenia.</p>
+            <p><a href="https://github.com/dlubom/hagen" target="_blank" rel="noopener">Kod atlasu</a> · <a href="https://github.com/m-schuetz/Potree-Next" target="_blank" rel="noopener">Potree-Next</a> · <a href="vendor/LICENSE" target="_blank" rel="noopener">AGPL-3.0</a></p>
+          </div>
+        </details>
+      </div>
+    </footer>
+  </main>
+  <script type="module" src="./lidar.js"></script>
+</body>
+</html>
