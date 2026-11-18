@@ -11,6 +11,10 @@ const baseSpecs = {
   ortho: { id: 'bmaporthofoto30cm', format: 'jpeg', style: 'normal', maxNativeZoom: 19 },
   relief: { id: 'bmapgelaende', format: 'jpeg', style: 'grau', maxNativeZoom: 17 }
 };
+const geologySpecs = {
+  geology: [['karte_geofast_50', 16], ['karte_50', 15]],
+  'historical-geology': [['manuskript_hist_28800', 16]]
+};
 const geoSphereAttribution = '© <a href="https://www.geosphere.at/">GeoSphere Austria</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>';
 let basemap, caveBounds, massifBounds;
 
@@ -32,19 +36,42 @@ function panelOpen(open) {
 panelOpen(window.matchMedia('(min-width: 800px) and (min-height: 480px)').matches);
 layersButton.addEventListener('click', () => panelOpen(panel.hidden));
 
+const SagisArchiveLayer = L.TileLayer.extend({
+  getTileUrl(coords) {
+    const crs = L.CRS.EPSG3857;
+    const scale = crs.scale(coords.z);
+    const size = this.getTileSize();
+    const northwest = crs.transformation.untransform(L.point(coords.x * size.x, coords.y * size.y), scale);
+    const southeast = crs.transformation.untransform(L.point((coords.x + 1) * size.x, (coords.y + 1) * size.y), scale);
+    // Export the image sublayer in Web Mercator, without the mosaic's index and footprints.
+    const params = new URLSearchParams({
+      f: 'image', layers: 'show:162', bboxSR: '3857', imageSR: '3857',
+      bbox: [northwest.x, southeast.y, southeast.x, northwest.y].map((value) => value.toFixed(4)).join(','),
+      size: `${size.x},${size.y}`, format: 'png32', transparent: 'true'
+    });
+    return `${this._url}?${params}`;
+  }
+});
+
 function changeBasemap() {
   if (basemap) map.removeLayer(basemap);
   basemap = null;
   el('tile-status').hidden = true;
   const selected = el('basemap').value;
   el('geology-info').hidden = selected !== 'geology';
+  el('historical-geology-info').hidden = selected !== 'historical-geology';
   if (selected === 'none') return;
   const options = { minZoom: 5, maxZoom: 23, noWrap: true };
   let tiles;
-  if (selected === 'geology') {
-    tiles = [['karte_geofast_50', 16], ['karte_50', 15]].map(([series, maxNativeZoom]) =>
+  if (geologySpecs[selected]) {
+    tiles = geologySpecs[selected].map(([series, maxNativeZoom]) =>
       L.tileLayer('https://gis.geosphere.at/images/rest/services/geologie/' + series + '/ImageServer/tile/{z}/{y}/{x}',
         { ...options, maxNativeZoom, attribution: geoSphereAttribution }));
+  } else if (selected === 'sagis-1952') {
+    tiles = [new SagisArchiveLayer('https://service.salzburg.gv.at/arcgis/rest/services/HistOrthofotos_Land_Salzburg/MapServer/export', {
+      ...options, tileSize: 512, maxNativeZoom: 18, bounds: [[46.92, 12.01], [48.07, 14.02]],
+      attribution: '© <a href="https://www.salzburg.gv.at/geodaten">SAGIS</a>'
+    })];
   } else {
     const { id, format, style, maxNativeZoom } = baseSpecs[selected];
     tiles = [L.tileLayer(`https://mapsneu.wien.gv.at/basemap/${id}/${style}/google3857/{z}/{y}/{x}.${format}`, {

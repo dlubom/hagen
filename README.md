@@ -45,6 +45,8 @@ W zakładce **Mapa 2D** wybór planu przenosi widok do jaskini. Kliknięcie prze
 
 W menu **Podkład** można wybrać mapę z poziomicami, cieniowaną **Rzeźbę terenu** z basemap.at, ortofotomapę lub geologię GeoSphere Austria 1:50 000. **Uskoki geologiczne** można włączyć na dowolnym tle. Po wybraniu **Odczyt skały** kliknij punkt na mapie, aby zobaczyć opis jednostki geologicznej na powierzchni i numer pozycji w legendzie. [Źródła podkładów](mapa/podklady-2d.md)
 
+Podkłady archiwalne to **Ortofotomapa SAGIS 1952–1954** oraz **Historyczna mapa geologiczna 1:28 800** z arkuszami GeoSphere z lat 1846–1898. Odczyt skały korzysta ze współczesnej geologii także na podkładach archiwalnych.
+
 Lista **Ciągi jaskiń z h2026** przybliża wybraną jaskinię. Warstwa zawiera 9724 podziemne odcinki dla 60 obiektów. Kliknięcie ciągu pokazuje nazwę i liczbę odcinków. Aby odświeżyć warstwę z lokalnej kopii gałęzi `h2026`, uruchom `python3 scripts/import_h2026.py /ścieżka/do/test2`. [Źródłowy projekt Survex](https://github.com/dlubom/test2/tree/ec21231914280347e05cedd10d9e9aff55955d89)
 
 GitHub Actions po zmianie na `main` kompiluje `hagen.svx`, generuje warstwy mapy z tego samego modelu, GPX i fotografii planów oraz publikuje całość. Do lokalnego podglądu potrzebne są Survex 1.4.24, PROJ (`cs2cs`), Python z NumPy i OpenCV oraz `curl` do pobrania CaveView.

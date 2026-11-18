@@ -35,6 +35,7 @@ details p { line-height: 1.45; margin: 6px 0 0; }
 #geology-info { margin-top: 6px; }
 #geology-info ul { margin: 4px 0; padding-left: 18px; line-height: 1.6; }
 #geology-info a { color: var(--green); }
+#historical-geology-info { margin: 6px 0 0; color: var(--muted); font-size: 12px; }
 fieldset { border: 0; padding: 0; }
 legend { margin: 0 0 4px; padding: 0; }
 .check { display: flex; align-items: center; gap: 7px; min-height: 27px; cursor: pointer; }
