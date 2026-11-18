@@ -1,10 +1,30 @@
 # Gdzie na planie mieści się ciąg 49,45 m?
 
-Jedno z możliwych położeń wypada przy **bocznej odnodze na południowym brzegu Große Halle, obok Dohlenschacht**. Stacja lokalna 2 leżałaby około **87 m na zachód i 27 m na południe od kopczyka I**. Kształt osi pasuje do rozwidlenia, lecz karta podaje zaledwie 1 m szerokości przy odcinku 1–2. W tym położeniu zewnętrzny obrys ma 23,4 m lub 17,9 m, zależnie od końca odcinka. Plan opisuje położoną poniżej *Eiskapelle*. Poziom i wspólna stacja pozostają nieustalone. [Test wymiarów i nazwanego kanionu](audyt-pomiarow.md) · [Plansza z dwoma położeniami](lokalny-na-planie.jpg) · [Interaktywna nakładka](lokalny-na-planie.html)
+**Najlepszym miejscem do sprawdzenia jest rozwidlenie na południowej ścianie Große Halle**, pomiędzy podpisami *Dachsbau mit Belüftung* i *unterlagernde Eiskapelle*. Proponowana stacja `local.2` wypada około **14,5 m w rzucie od `kgw.2`**, w kierunku wschodnio-północno-wschodnim. Numerów lipcowych stacji ani rzędnej tego rozwidlenia nie ma na planie. [Główny model do Aven](../../hagen.3d) · [Źródło Survex z opisem łącznika](../lacznik-grosse-halle.svx) · [Ruchoma nakładka](lokalny-na-planie.html)
 
-## Co przemawia za rozwidleniem
+![Położenie głównych i lokalnych celowych na planie oraz proponowany łącznik przy południowej ścianie Große Halle](dopasowanie-grosse-halle.jpg)
 
-Przy tym ustawieniu najdłuższy odcinek 0–1 biegnie przez Wielką Salę. Od stacji 2 krótkie ramię 2–3–4 załamuje się wraz z narysowaną odnogą, a drugie, 2–C–B–A, podąża na północny wschód. Punkt A wypada około 2 m od końca widocznego na planie. Początek ciągu 0 leży wtedy około 72 m na zachód i 3 m na południe od I. Najbliższa para obu sieci, lokalna 4 i główna `kgw.2`, jest oddalona w poziomie o 12,3 m. [Plan 1:500](../zrodla/plan-1-500.jpg) · [Współrzędne lokalne z dziennika](wspolrzedne-archiwalne.tsv)
+## Dopasowanie do większej fotografii
+
+Na planie 1:500 krótki zygzak od ściany hali ma w rzucie około **1,6 m i 138 gon**, a po załamaniu **2,9 m i 253 gon**. Na karcie 1 kolejne celowe 2–3 i 3–4 mają w rzucie **1,30 m i 141 gon** oraz **2,80 m i 256 gon**. W tym samym ustawieniu drugie ramię, 2–C–B–A, biegnie w stronę ślepej odnogi na wschodzie. Stacja A wypada około **2,2 m** od jej narysowanego końca. Ten koniec posłużył do sprawdzenia dopasowania. Określenie *unterlagernde Eiskapelle* wskazuje niżej położoną komorę. Przynależność obu ramion do tego samego piętra wymaga sprawdzenia. [Karta 1](../zrodla/karta-1.jpg) · [Oryginalny plan](../zrodla/plan-1-500.jpg)
+
+Na fotografii 4000 × 1848 px, w orientacji zgodnej z napisami, ręcznie wskazano miejsca dla 2, 3 i 4, odpowiednio około (2453, 950), (2463, 956) i (2447, 970) px, licząc od lewego górnego rogu. Użyto transformacji pomiędzy fotografiami oraz interpolacji na drukowanej siatce 50 m. Średnia z trzech przesunięć daje dla `local.0` **E = −71,3 m, N = −3,2 m** względem kopczyka I, przy zachowaniu skali i kierunków z karty. Odstępy od trzech wybranych miejsc na rysunku wynoszą około 0,1–0,3 m. To miara dopasowania kreski, a dokładność przeniesienia w teren pozostaje nieznana. Różnica względem wcześniejszej próby przy tej ścianie wynosi 0,47 m. [Kalibracja obu fotografii](../../scripts/build_map_data.py)
+
+W tym ustawieniu około **43,4 z 43,9 m** rzutu mieści się w uprzednio odczytanym obrysie. Końcówka 3–4 wychodzi poza maskę o około 0,47 m **długości odcinka**. Jeśli odległości do ścian odnoszą się do celu, przy stacji 2 karta podaje 1 m szerokości, a przecięcie maski prostopadle do celowej daje około 3,5 m. Przy stacji 1 dla celowej dochodzącej 0–1 jest odpowiednio 11 m i 21,9 m. Wynik przy 2 jest szczególnie wrażliwy na to, po której stronie narożnika przetnie się obrys. Starsza rycina różni się w tej okolicy o kilka metrów. Te rozbieżności ograniczają pewność identyfikacji. [Kontrola obrysu](sprawdz_obrys.py) · [Rycina z 1963 r.](../zrodla/hoehlenbuch/s-304.jpg)
+
+## Łącznik i kontrola terenowa
+
+W głównym modelu połączono stacje **`kgw.2 → local.4`** sztucznym bokiem oznaczonym „do weryfikacji w terenie”. W historycznym układzie lipcowym przyjęto **ΔE = +12,45 m, ΔN = +2,58 m**, czyli 12,71 m w rzucie przy azymucie około 87 gon. **ΔH = 0 m jest założeniem**. Obie stacje mają zatem w modelu wysokość 1703,71 m, a przy archiwalnej rzędnej `kgw.2` równej +42,70 m lokalne zero wypada na +36,82 m względem I. Linia reprezentuje przesunięcie między sieciami, a jej prosty przebieg przez ten sektor nie ma dokumentacji terenowej. Flaga Survex `duplicate` wyłącza łącznik z sumy. Łączna długość zmierzonych odcinków podziemnych w tej kompilacji wynosi **1037,55 m**. [Model do Aven](../../hagen.3d) · [Plik wejściowy](../lacznik-grosse-halle.svx)
+
+W terenie punktem odniesienia jest główna `kgw.2`, cel z XIII (E2) na karcie 3. W pasie południowej ściany hali należy rozpoznać krótki zygzak do 4 oraz drugie ramię, które od 2 do A wznosi się o 8,38 m. Rozwidlenie `local.2` wypada około 13,6 m na wschód i 5,1 m na północ od `kgw.2` w siatce lipcowej. Najważniejszy jest rzeczywisty pomiar od rozpoznanej stacji głównej do rozwidlenia lub końca 4, z różnicą wysokości i szkicem prowadzenia celowych. Pozwoli zastąpić sztuczny bok i sprawdzić piętro obu odnóg. [Karta 3](../zrodla/karta-3.jpg)
+
+Plan pokazuje osobno drogę od dolnego E1 przez *Vorhalle*, *Breiter Gang* i *Eishalle* do Große Halle. Karty nie zawierają ciągu przez te partie. Również północny kanion ma dalszy przebieg ku *Hirschenhalle*. Sztuczny bok dotyczy wyłącznie umiejscowienia siedmiu odcinków z karty 1. [Plan 1:500](../zrodla/plan-1-500.jpg)
+
+## Wcześniejsze ustawienia w obrysie starej części
+
+### Próba ze stacją 2 w wylocie odnogi
+
+W starszej próbie ze stacją 2 przy wylocie odnogi najdłuższy odcinek 0–1 biegnie przez Wielką Salę. Od stacji 2 krótkie ramię 2–3–4 załamuje się wraz z narysowaną odnogą, a drugie, 2–C–B–A, podąża na północny wschód. Punkt A wypada około 2 m od końca widocznego na planie. Początek ciągu 0 leży wtedy około 72 m na zachód i 3 m na południe od I. Najbliższa para obu sieci, lokalna 4 i główna `kgw.2`, jest oddalona w poziomie o 12,3 m. [Plan 1:500](../zrodla/plan-1-500.jpg) · [Współrzędne lokalne z dziennika](wspolrzedne-archiwalne.tsv)
 
 Na karcie 1 widnieje dopisek o starej części oraz wysokość barometryczna wejścia 1690 m. Pierwszy punkt nie ma numeru stacji głównego ciągu. Arkusz obliczeń przyjmuje dla niego osobne zero. Stacja A znajduje się 8,38 m powyżej lokalnej 2. Książka wspomina o szczelinowym oknie na wysokości około 10 m w rejonie studni, ale nie podaje położenia wystarczającego do powiązania go z punktem A. [Karta 1](../zrodla/karta-1.jpg) · [Arkusz z lokalnym zerem](../zrodla/wspolrzedne-2.jpg)
 

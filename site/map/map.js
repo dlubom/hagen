@@ -5,7 +5,7 @@ const map = L.map('map', { zoomControl: false, trackResize: false, minZoom: 5, m
 const dataRoot = new URL('./data/', document.baseURI);
 const layersButton = el('layers-button');
 const panel = el('layers');
-const colors = { underground: '#964159', surface: '#c77a15', regional: '#286466', gps: '#166994', entrances: '#edba63' };
+const colors = { underground: '#964159', surface: '#c77a15', synthetic: '#c11265', regional: '#286466', gps: '#166994', entrances: '#edba63' };
 const baseSpecs = { topo: ['bmapgrau', 'png'], ortho: ['bmaporthofoto30cm', 'jpeg'] };
 let basemap, planLayer, caveBounds, massifBounds;
 
@@ -224,7 +224,7 @@ async function load() {
     [manifest.gps, manifest.regional, manifest.surveys, manifest.controls].map(readJson)
   );
   const surveyOptions = (surface) => ({
-    filter: (feature) => feature.properties.surface === surface,
+    filter: (feature) => feature.properties.surface === surface && !feature.properties.synthetic,
     style: { color: surface ? colors.surface : colors.underground, weight: 3, dashArray: surface ? '6 5' : undefined },
     onEachFeature: (f, l) => l.bindPopup(() => element('p', (surface ? 'Powierzchnia' : 'Pod ziemią') + ' · ' + f.properties.from + ' — ' + f.properties.to))
   });
@@ -244,6 +244,17 @@ async function load() {
   });
   const underground = L.geoJSON(surveys, surveyOptions(false));
   const surface = L.geoJSON(surveys, surveyOptions(true));
+  const synthetic = L.geoJSON(surveys, {
+    filter: (feature) => feature.properties.synthetic,
+    style: { color: colors.synthetic, weight: 4, dashArray: '4 4', lineCap: 'butt' },
+    onEachFeature: (feature, line) => line.bindPopup(() => {
+      const popup = element('div', '');
+      popup.append(element('h2', 'Sztuczny łącznik · do weryfikacji w terenie'),
+        element('p', feature.properties.from + ' — ' + feature.properties.to),
+        element('p', 'Z dopasowania do planu wynika 12,71 m w rzucie. Obu końcom przypisano tę samą wysokość (ΔH = 0 m).'));
+      return popup;
+    }, popupOptions)
+  });
   const entranceLayer = L.layerGroup();
   for (const control of controls.features.filter((f) => f.properties.kind === 'control')) {
     const { station, name } = control.properties;
@@ -265,6 +276,7 @@ async function load() {
   addToggle('Otwory 1335/70', 'entrances', entranceLayer);
   addToggle('Poligon podziemny 1335/70', 'underground', underground);
   addToggle('Poligon powierzchniowy 1335/70', 'surface', surface);
+  addToggle('Sztuczny łącznik · do weryfikacji w terenie', 'synthetic', synthetic);
   const gpsToggle = addToggle('Punkty GPX', 'gps', gpsLayer);
   const regionalToggle = addToggle('Ciągi jaskiń · h2026', 'regional', regionalLayer);
   const caves = regionalLayer.getLayers().sort((a, b) => a.feature.properties.name.localeCompare(b.feature.properties.name, 'pl', { numeric: true }));

@@ -39,7 +39,7 @@ legend { margin: 0 0 4px; padding: 0; }
 .check { display: flex; align-items: center; gap: 7px; min-height: 27px; cursor: pointer; }
 .check input { accent-color: var(--green); width: 15px; height: 15px; margin: 0; }
 .check i { width: 15px; height: 0; flex-shrink: 0; border-top: 3px solid var(--c); }
-.check .surface { border-top-style: dashed; }
+.check .surface, .check .synthetic { border-top-style: dashed; }
 .check .gps, .check .entrances { width: 10px; height: 10px; margin: 0 2.5px; border-radius: 50%; background: var(--c); border: 1px solid #475c56; }
 .check .entrances { border: 2px solid #372f23; }
 #matches { padding: 2px 0; margin: 0; list-style: none; }

@@ -1,5 +1,7 @@
 # Oryginalny eksport GPX zawiera CRLF i spacje na końcach wierszy.
 mapa/zrodla/*.gpx -text -whitespace
+# Końcowe tabulatory zachowują puste kolumny brakujących współrzędnych.
+1335-70/kontrola/dav-neh.tsv whitespace=-blank-at-eol
 # Zachowaj pliki dystrybucyjne i licencje w oryginalnej postaci.
 site/map/vendor/leaflet/** -whitespace linguist-vendored
 site/assets/*-OFL.txt -whitespace

@@ -1,8 +1,26 @@
 # Kälbergruben-Windloch · kontrola pomiarów ze skanów
 
-**Ciąg 49,45 m pozostaje bez dowiązania.** Przy wierszu 1–2 karty 1 widnieje pominięty w transkrypcji dopisek, prawdopodobnie *Cañon*. Obserwator zapisał 1 m w lewo i 0 m w prawo. Sprawdziłem, gdzie przy zachowaniu zmierzonych azymutów można pomieścić długi odcinek 0–1, rozwidlenie przy 2 i taki wąski przekrój. [Karta 1](../zrodla/karta-1.jpg) · [Tabela wymiarów](../wymiary.tsv)
+**Na większej fotografii planu dwa załamania krótkiej odnogi przy południowej ścianie Große Halle odpowiadają celowym 2–3–4 z karty 1.** W [głównym modelu](../../hagen.3d) siedem pomiarów lokalnych jest wpiętych do sieci przez sztuczny bok `kgw.2 → local.4`. Przesunięcie poziome 12,71 m pochodzi z dopasowania do planu. Wysokość obu końców umownie zrównano. [Dopasowanie, założenia i miejsce kontroli terenowej](dowiazanie.md) · [Plansza z łącznikiem](dopasowanie-grosse-halle.jpg)
 
-## Gdzie może leżeć ciąg lokalny
+## Ponowny odczyt oryginałów i kontrola DAV ↔ NEH
+
+Sprawdzono fotografie wprowadzone w rewizji `11c488a`. Wszystkie **111** par stacji, odległości, azymutów i nachyleń zgadzają się z kartami po uwzględnieniu zapisu pionu, numeracji i jednostek. Formularz podaje odległość, nachylenie, kierunek. W [tabeli DAV ↔ NEH](dav-neh.tsv) kolumny D, A, V oznaczają odległość skośną, azymut od północy i nachylenie od poziomu. W archiwum Y oznacza wschód, X północ, H wysokość. Przy I jest dopisek „SH 1690 m”, a do rachunku lokalnego względem I przyjęto zero wysokości. Karta 1 ma własne zero. Rozdzielono dwa dojścia do 24. [Pomiary główne](../pomiary.svx) · [Siedem celowych z karty 1](../lokalny-pomiary.svx) · [Transkrypcja współrzędnych](wspolrzedne-archiwalne.tsv)
+
+Dla każdej celowej policzono ΔN = D cos V cos A, ΔE = D cos V sin A i ΔH = D sin V. Porównano je z różnicą współrzędnych obu końców, a z tej różnicy odtworzono także D, A i V. Osobno porównano pozycje narastająco z **112 wpisami** w trzech arkuszach. Obliczenia są w siatce archiwalnej, przed wyrównaniem pętli, z pełną precyzją do końca sumowania. Puste pola oznaczają brak źródłowej współrzędnej lub niewyznaczalny azymut pionu. [Arkusz lipcowy 1](../zrodla/wspolrzedne-1.jpg) · [Arkusz lipcowy 2](../zrodla/wspolrzedne-2.jpg) · [Arkusz październikowy](../zrodla/1985-10-obliczenia.jpg)
+
+| Seria | Celowe | Dwa końce w arkuszu | Maks. różnica wektora 3D | Maks. różnica pozycji narastająco |
+|---|---:|---:|---:|---:|
+| Lipiec, ciąg główny z powierzchnią | 98 | 96 | 1,11 cm (VI–VII) | 1,40 cm (6) |
+| Lipiec, osobne zero | 7 | 7 | 1,15 cm (1–2) | 0,75 cm (C) |
+| Odgałęzienie od 65 | 6 | 6 | 3,52 cm (4–5) | 2,86 cm (5), licząc od I |
+
+Na **108 ze 109** boków z obiema pozycjami każda składowa zgadza się lepiej niż do 1 cm. Wyjątek to rzędna `oct.5`. Na październikowym formularzu symbol D oznacza **rzut poziomy**, a L odległość skośną. Zgodność obejmuje wszystkie rzuty poziome w sześciu wierszach (do 1 mm) i wszystkie 18 przyrostów (do 1 cm) przy obliczeniu w stopniach, w tym zapisane 373° na 4–2. Spośród 18 sum współrzędnych 17 jest poprawnych. Na 4–5 archiwalne H = +11,52 m i ΔH = −2,57 m dają **+8,95 m**, a wpisano **+8,99 m**. W przepisanym arkuszu pozostawiono oryginał. Omyłka dotyczy ostatniego dodawania, więc nie wymaga zmiany odczytów w Survex. [Wszystkie rubryki października](pazdziernik-obliczenia.tsv)
+
+Stacja **12** znalazła się poza kadrem. Z DAV wynika dla niej N = −46,860 m, E = −137,797 m, H = +0,238 m. Nie wpisano tych liczb jako odczytu zdjęcia. Między widocznymi punktami 11 i 13 suma dwóch wektorów przez 12 zgadza się z arkuszem do **8,7 mm w 3D**. Odcinek 80–81 ma na karcie −100 gon oraz brak azymutu. Współrzędne potwierdzają pion 6,40 m. [Porównanie wiersz po wierszu](dav-neh.tsv)
+
+**Wymiary przekrojów.** Na karcie 3 przy 2–3 w polu „w dół” widnieje strzałka ↓. Poprzednia transkrypcja podawała 4 m. Przy 16–17 oba wymiary poziome mają po 2 m, a brązowe plamy odróżniają się od atramentu. Na karcie 5 przy 47–48 w polu „w górę” widać zero. Przy 48–49 zapis w tej rubryce pozostaje niejednoznaczny. Na karcie 6 przy 56–57 widnieje słowo *Röhre*. Na karcie 7 przy 77–78 znak w dół przypomina strzałkę, ale możliwy jest też odczyt 6 m. W tabeli zachowano obie interpretacje. Słabo czytelny dopisek przy 1–2 nadal wygląda na *Cañon*. Na szkicach podobne słowo pojawia się przy 53 i 71, a plan podpisuje w różnych miejscach *Karl-cañon* i *Tropfsteincañon*. Dopisek sam nie lokalizuje ciągu. [Wycinki w większej rozdzielczości](odczyt-wymiarow.jpg) · [Poprawiona tabela wymiarów](../wymiary.tsv)
+
+## Wcześniejsze próby przesunięcia w obrysie
 
 ![Dwa ustawienia ciągu na planie archiwalnym i szerokości odczytane przy stacjach 1 i 2](audyt-ciagu-lokalnego.jpg)
 
@@ -38,7 +56,7 @@ Przy tej interpretacji na karcie 1 trzeba szukać **przejścia z przestrzeni sze
 
 **Próba z górną odnogą na innym piętrze.** Pozwoliłem ramieniu 2–C–B–A wyjść poza odczytany obrys. Wewnątrz musiały się zmieścić tylko cztery boki 0–1–2–3–4 o łącznym rzucie 34,51 m. Na siatce co 0,25 m dało to 1672 położenia zamiast 1021. Na gęstszej siatce co 0,10 m było 10 460 położeń. Najmniejsza szerokość z obrysu w stacji 2 wyniosła wówczas 3,7 m wobec 1 m w dzienniku. Przy najbardziej zgodnym łącznie zestawie czterech przekrojów model dał 23,1 / 3,7 / 6,0 / 0,3 m przy zapisanych 11 / 1 / 1 / 0,4 m (kryterium najmniejszej maksymalnej różnicy). To test istniejącego obrysu i kierunku prostopadłego do celowej. Wewnętrznej szczeliny i przebiegu na innym piętrze nie da się nim wykluczyć. [Powtarzalny test geometrii](sprawdz_obrys.py)
 
-Sprawdziłem też obrót **samego lokalnego poligonu o 200 gon** w poziomie jako próbę wyjaśnienia podobieństwa do głównego odcinka 17–18. Gdy nałożyć 0 na główną 18, lokalna 1 wypada 0,05 m od głównej 17 w przestrzeni. Przy następnej parze, lokalnej 2 i głównej 16, rozbieżność rośnie do 2,07 m. Sam obrót odwraca znaki obu poziomych składowych względem zapisanych w tabeli lokalnej. Sprawdziłem również małą wstawkę w prawym dolnym rogu planu. W skali głównej siatki sam odcinek 0–1 miałby tam około 86 px, a dolny rysunek wstawki ma około 25 × 53 px. Jej własnej skali i oznaczeń punktów nie udało się odczytać. [Arkusz lokalny](../zrodla/wspolrzedne-2.jpg) · [Plan 1:500](../zrodla/plan-1-500.jpg)
+Sprawdziłem też obrót **samego lokalnego poligonu o 200 gon** w poziomie jako próbę wyjaśnienia podobieństwa do głównego odcinka 17–18. Gdy nałożyć 0 na główną 18, lokalna 1 wypada 0,05 m od głównej 17 w przestrzeni. Przy następnej parze, lokalnej 2 i głównej 16, rozbieżność rośnie do 2,07 m. Sam obrót odwraca znaki obu poziomych składowych względem zapisanych w tabeli lokalnej. Na większej fotografii w prawym dolnym rogu można odczytać „M = 1:25 000” i nazwy terenowe. Wstawka pokazuje położenie w masywie. [Arkusz lokalny](../zrodla/wspolrzedne-2.jpg) · [Plan 1:500](../zrodla/plan-1-500.jpg)
 
 Dokumentem, który mógłby rozstrzygnąć dowiązanie, byłby szkic starej części z 20 lipca 1985 r. z oznaczeniami **2, C, B, A** oraz wspólną stacją głównego pomiaru. Rozpoznawalny szczegół planu dałby położenie poziome, a rzędna opisana względem kopczyka I pozwoliłaby dodatkowo ustalić wysokość. Jako późniejsze źródło bibliograficzne sprawdziłem też tom 6 *Salzburger Höhlenbuch* z 1996 r., zawierający uzupełnienia do tomów 1–5. Katalog potwierdza istnienie tomu. Nie ustaliłem, czy zawiera wpis o jaskini 1335/70. [Deutsche Nationalbibliothek, rekord tomu 6](https://d-nb.info/954522540)
 
@@ -48,7 +66,7 @@ Dokumentem, który mógłby rozstrzygnąć dowiązanie, byłby szkic starej czę
 
 ![Osiem ręcznych podsumowań z siedmiu kart oraz oba skrajne wiersze arkusza wysokości](audyt-sum-kart.jpg)
 
-- **Długość.** Ręczne podsumowania obu serii z karty 1 i kart 2–7 dają 1235,25 m. Po dodaniu 111 odcinków pojedynczo wychodzi 1236,35 m. Na karcie 2 ręcznie wpisano 198,70 m przy sumie 198,80 m, a na karcie 7 wpisano 152,25 m przy sumie 153,25 m. Po odjęciu 198,80 m pomiaru powierzchniowego zostaje **1037,55 m zapisanych odcinków podziemnych**. To 988,10 m w głównym modelu i 49,45 m w osobnym ciągu. [Karta 2](../zrodla/karta-2.jpg) · [Karta 7](../zrodla/karta-7.jpg)
+- **Długość.** Ręczne podsumowania obu serii z karty 1 i kart 2–7 dają 1235,25 m. Po dodaniu 111 odcinków pojedynczo wychodzi 1236,35 m. Na karcie 2 ręcznie wpisano 198,70 m przy sumie 198,80 m, a na karcie 7 wpisano 152,25 m przy sumie 153,25 m. Po odjęciu 198,80 m pomiaru powierzchniowego zostaje **1037,55 m zapisanych odcinków podziemnych**. Na tę sumę składa się 988,10 m pomiarów od E2 i 49,45 m z karty 1. [Karta 2](../zrodla/karta-2.jpg) · [Karta 7](../zrodla/karta-7.jpg)
 - **Wysokość.** Przed wyrównaniem najwyższa rzędna sieci głównej to +67,29 m na powierzchniowej XII, najniższa −9,48 m w podziemnej 28. Rozpiętość wynosi 76,77 m. Od górnego otworu E2 do 28 było przed wyrównaniem 72,52 m. Po wyrównaniu pętli najniżej leży 79, a rozpiętość podziemnego modelu E2–79 wynosi 71,59 m. [Arkusz współrzędnych 1](../zrodla/wspolrzedne-1.jpg) · [Arkusz współrzędnych 2](../zrodla/wspolrzedne-2.jpg)
 
 Oba wpisy otworów w GPX podają 1235 m i 77 m. Obie liczby odtwarzają się po zaokrągleniu rachunku obejmującego powierzchnię. To możliwe wspólne źródło obu wartości. GPX nie podaje sposobu obliczenia. Z różnicy między 1235 m a sumą pomiarów podziemnych nie można wyznaczyć długości brakującego korytarza. [Źródłowy GPX, wpisy Kalbergrube_70-d i Kalbergrube_70-g](../../mapa/zrodla/Hagengebirge-2025-8.gpx)
@@ -71,9 +89,10 @@ Porównanie ze skanami objęło 98 lipcowych odcinków głównej sieci, 7 lokaln
 
 Składowe obliczone ze wzorów ΔE = L cos i sin A, ΔN = L cos i cos A, ΔH = L sin i porównałem ze 112 wpisami archiwalnymi, rozdzielając oba dojścia do 24. Maksymalne odstępstwa przestrzenne wyniosły 1,4 cm w głównym ciągu lipcowym, 0,8 cm w lokalnym i 2,9 cm w odgałęzieniu od 65, licząc od niezaokrąglonej lipcowej pozycji tej stacji. Wiersz stacji 12 jest poza czytelnym kadrem. Suma wektorów od 11 przez 12 do 13 zgadza się z różnicą pozycji 11 i 13 do 0,9 cm. Zgodność z dawnym rachunkiem pozwala sprawdzić transkrypcję. Błąd terenowy może występować zarówno w karcie, jak i w obliczonych z niej współrzędnych. [Tabela kontrolna](wspolrzedne-archiwalne.tsv)
 
-Oba testy można powtórzyć w katalogu głównym. Pierwszy używa programów `cavern` i `dump3d`, które zapisują i wypisują pozycje modelu zaokrąglone do centymetra. Drugi wymaga NumPy i Pillow.
+Kontrolę obu tabel DAV i NEH uruchamia pierwszy skrypt (Python 3.9+). Drugi sprawdza wynik Survex przez `cavern` i `dump3d`, z pozycjami zapisanymi do centymetra. Trzeci służy do testu obrysu i wymaga NumPy oraz Pillow.
 
 ```sh
+python3 1335-70/kontrola/sprawdz_dav_neh.py
 python3 1335-70/kontrola/sprawdz.py
 python3 1335-70/kontrola/sprawdz_obrys.py
 ```

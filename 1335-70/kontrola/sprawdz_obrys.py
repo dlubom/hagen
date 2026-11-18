@@ -84,6 +84,17 @@ def szerokosc(poczatki, stacja, kierunek):
 
 
 def porownaj():
+    robocze = np.array([DANE["working"]])
+    odcinki = DANE["edges"]
+    w_obrysie = dlugosc_wewnatrz(robocze, odcinki)[0]
+    wektor = robocze[0] + LOKALNE["4"] - DANE["main"]["k2"]
+    print(f"Dowiązanie robocze kgw.2 → local.4: ΔE {wektor[0]:+.2f}, "
+          f"ΔN {wektor[1]:+.2f} m, rzut {np.linalg.norm(wektor):.2f} m")
+    print(f"Rzut ciągu lokalnego w obrysie: {w_obrysie:.2f} m")
+    for od, do in (("0", "1"), ("1", "2")):
+        wynik = szerokosc(robocze, do, LOKALNE[do] - LOKALNE[od])[0]
+        print(f"Szerokość w roboczym położeniu stacji {do} dla {od}–{do}: {wynik:.1f} m")
+
     e, n = np.meshgrid(np.arange(-155, 20.25, 0.25), np.arange(-40, 130.25, 0.25))
     poczatki = np.column_stack((e.ravel(), n.ravel()))
     dlugosc = sum(np.linalg.norm(LOKALNE[b] - LOKALNE[a]) for a, b in DANE["edges"])

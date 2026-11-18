@@ -1,6 +1,6 @@
 *begin kgw
 *title "Kälbergruben-Windloch (1335/70)"
-*export e1 e2 i
+*export e1 e2 i 2
 *entrance e1
 *entrance e2
 *begin

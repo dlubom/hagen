@@ -1,4 +1,4 @@
-*title "Hagengebirge — Kälbergruben-Windloch 1335/70"
+*title "Hagengebirge — Kälbergruben-Windloch 1335/70 — łącznik kgw.2–local.4 do weryfikacji w terenie"
 *cs out EPSG:32633
 *cs long-lat
 ; WGS84 lon/lat (założenie), wysokości w metrach jak podał użytkownik.
@@ -7,3 +7,5 @@
 ; kgw.e2   13.13725 47.518052 1729
 *declination auto 13.13852 47.518112 1661
 *include 1335-70/pomiary
+*include 1335-70/lokalny-pomiary
+*include 1335-70/lacznik-grosse-halle

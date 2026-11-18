@@ -10,6 +10,7 @@ ROOT = HERE.parent
 GPX = HERE / "zrodla" / "Hagengebirge-2025-8.gpx"
 REGIONAL = HERE / "zrodla" / "h2026.geojson"
 HTML = HERE / "index.html"
+LACZNIK_ROBOCZY = {"kgw.2", "local.4"}
 
 
 def location(node):
@@ -40,7 +41,7 @@ def cave_data(model_path=ROOT / "hagen.3d"):
         if v[:1] == ["NODE"]:
             nodes[tuple(v[1:4])] = v[4].strip("[]")
         if v[:1] == ["LEG"]:
-            edges.append((tuple(v[1:4]), tuple(v[4:7]), "SURFACE" in v[7:]))
+            edges.append((tuple(v[1:4]), tuple(v[4:7]), v[7:]))
     rows = subprocess.check_output(
         ["cs2cs", crs, "OGC:CRS84", "-f", "%.10f"],
         input="".join(" ".join(xyz) + "\n" for xyz in nodes), text=True,
@@ -51,7 +52,11 @@ def cave_data(model_path=ROOT / "hagen.3d"):
         stations[nodes[xyz]] = [lat, lon, height]
     if len(stations) != len(nodes):
         raise ValueError("Niepełna transformacja układu współrzędnych.")
-    legs = [[nodes[a], nodes[b], surface] for a, b, surface in edges]
+    legs = []
+    for a, b, flags in edges:
+        start, end = nodes[a], nodes[b]
+        synthetic = "DUPLICATE" in flags and {start, end} == LACZNIK_ROBOCZY
+        legs.append([start, end, "SURFACE" in flags, synthetic])
     controls = {}
     for line in (ROOT / "hagen.svx").read_text().splitlines():
         v = line.lstrip("*; ").split()

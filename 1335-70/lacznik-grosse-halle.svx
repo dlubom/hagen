@@ -1,0 +1,12 @@
+; Sztuczny łącznik kgw.2 → local.4 do weryfikacji w terenie.
+; Przesunięcie E,N odczytano z planu 1:500 przy południowej ścianie Große Halle.
+; ΔH = 0 m przyjęto umownie. Dopasowanie i zadanie terenowe: kontrola/dowiazanie.md.
+; Data określa północ magnetyczną lipcowej siatki pomiarowej.
+; Flaga „duplicate” wyróżnia łącznik i wyłącza go z długości jaskini.
+*begin
+*flags duplicate
+*cartesian magnetic
+*date 1985.07.20
+*data cartesian from to easting northing altitude
+kgw.2 local.4   +12.45  +2.58  0
+*end

@@ -34,6 +34,10 @@ fieldset label { display: flex; align-items: center; gap: 8px; padding: 4px 0; f
 fieldset input[type=checkbox] { width: 15px; height: 15px; margin: 0; }
 .key { width: 13px; height: 0; border-top: 3px solid #b66e00; }
 .key.surface { border-top: 3px dashed #227f98; }
+.key.tie { border-top: 3px dashed #c11265; }
+.tie-info { margin: 0 0 6px 23px; font-size: 12px; line-height: 1.4; }
+.tie-info p { margin: 0 0 4px; }
+.tie-info button { color: #94204e; background: none; border: 0; padding: 3px 0; text-decoration: underline; }
 .range-label { justify-content: space-between; margin-top: 5px; }
 #opacity { display: block; width: 100%; margin: 3px 0 0; }
 .tools { top: 16px; right: 16px; overflow: hidden; display: grid; }

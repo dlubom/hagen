@@ -1,0 +1,3 @@
+*title "Große Halle — robocze dowiązanie do weryfikacji w terenie"
+; Główny model zawiera już kartę 1 i łącznik kgw.2 → local.4.
+*include ../../hagen

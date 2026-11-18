@@ -54,11 +54,18 @@ def vectors(output, model_path, points):
         if props.get("name") in names:
             props["station"] = names[props["name"]]
         gps.append(feature("Point", [lon, lat], **props))
-    for start, end, surface in legs:
+    for start, end, surface, synthetic in legs:
         coords = [[stations[s][1], stations[s][0]] for s in (start, end)]
         surveys.append(
             feature(
-                "LineString", coords, **{"from": start, "to": end, "surface": surface}
+                "LineString",
+                coords,
+                **{
+                    "from": start,
+                    "to": end,
+                    "surface": surface,
+                    "synthetic": synthetic,
+                },
             )
         )
     for station, label in (("kgw.e1", "Otwór dolny"), ("kgw.e2", "Otwór górny")):

@@ -17,6 +17,11 @@
     <fieldset id="settings" disabled>
       <label><input id="centreline" type="checkbox" checked> <span class="key underground"></span> Poligon podziemny</label>
       <label><input id="surface" type="checkbox" checked> <span class="key surface"></span> Ciąg powierzchniowy</label>
+      <label><input id="tie" type="checkbox" checked> <span class="key tie"></span> Sztuczny łącznik</label>
+      <div class="tie-info">
+        <p><strong>Do weryfikacji w terenie</strong><br>kgw.2 → local.4 · 12,71 m<br>Założona różnica wysokości 0 m.</p>
+        <button id="locate-tie" type="button">Zbliż do łącznika</button>
+      </div>
       <label><input id="labels" type="checkbox"> Numery stacji</label>
       <label><input id="terrain" type="checkbox" checked> Model terenu</label>
       <label for="opacity" class="range-label">Krycie terenu <output id="value" for="opacity">60%</output></label>

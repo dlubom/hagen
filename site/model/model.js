@@ -17,12 +17,14 @@ function loadModel() {
       shading: {
         single: "#ffb648",
         surface: "#9be7ff",
+        duplicate: "#ff5fa1",
         contours: { base: "#ffffff", line: "#a2af96", line10: "#667b61", interval: 10 }
       }
     },
     view: {
       cameraType: CV2.CAMERA_PERSPECTIVE, box: false, HUD: false,
       shadingMode: CV2.SHADING_SINGLE, surfaceShading: CV2.SHADING_SURFACE,
+      duplicateLegs: true, duplicateShading: CV2.SHADING_DUPLICATE,
       terrain: true, terrainOpacity: .60, terrainDatumShift: false,
       terrainShading: CV2.SHADING_CONTOURS, surfaceLegs: true,
       entrances: false, stationLabelOver: true, stationLabels: false, linewidth: .28
@@ -38,9 +40,23 @@ function loadModel() {
     controls.scaleDolly(1.14);
   }
 
-  viewer.addEventListener("newCave", () => {
+  viewer.addEventListener("newCave", ({ survey }) => {
     startView();
     viewer.HUD = false;
+    viewer.duplicateLegs = get("tie").checked;
+    get("locate-tie").onclick = () => {
+      const from = survey.surveyTree.getByPath("kgw.2");
+      const to = survey.surveyTree.getByPath("local.4");
+      const midpoint = survey.getWorldPosition(from.clone().lerp(to, .5));
+      startView();
+      const camera = controls.cameraManager.activeCamera;
+      const offset = camera.position.clone().sub(controls.target).multiplyScalar(.18);
+      controls.target.copy(midpoint);
+      camera.position.copy(midpoint).add(offset);
+      controls.update();
+      get("tie").checked = true;
+      viewer.duplicateLegs = true;
+    };
     get("settings").disabled = false;
     message.hidden = viewer.hasTerrain;
     if (!viewer.hasTerrain) message.textContent = "Model jaskini gotowy. Nie udało się wczytać terenu.";
@@ -57,6 +73,7 @@ function loadModel() {
   };
   get("centreline").onchange = event => { viewer.legs = event.target.checked; };
   get("surface").onchange = event => { viewer.surfaceLegs = event.target.checked; };
+  get("tie").onchange = event => { viewer.duplicateLegs = event.target.checked; };
   get("labels").onchange = event => { viewer.stationLabels = event.target.checked; };
   get("viewer").onkeydown = event => {
     if (!viewer.surveyLoaded) return;
