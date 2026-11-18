@@ -24,6 +24,22 @@ aven hagen.3d
 
 Sprawdzono w Survex 1.4.24. W Aven włączenie odcinków powierzchniowych pokazuje ciąg między otworami. Pomiary poprzeczne są w [tabeli wymiarów](1335-70/wymiary.tsv), w kolejności pól formularza ← ↑ ↓ →, przy konkretnych wierszach. Karta powierzchniowa i dodatek od stacji 65 mają puste rubryki wymiarów. Puste pole, zero, znak zapytania i opis terenowy mają różne znaczenia. Porównanie podpisanych przekrojów 52, 71 i 72 przemawia za odczytem wymiarów przy stacji docelowej. Dla ciągu lokalnego jest to założenie przez analogię. [Przekroje i profil lokalny](1335-70/kontrola/przekroje-a-ciag-lokalny.jpg). Numery stacji na [planszy przekrojów](1335-70/kontrola/przekroje-polowe.jpg) pochodzą z podpisów przy szkicach.
 
+## Plan jaskini w Therionie
+
+[Plan do druku, A2, 1:750](1335-70/therion/kalbergruben-plan.pdf) · [Rysunek do edycji w XTherionie](1335-70/therion/kalbergruben.th2) · [Przekroje poprzeczne](1335-70/therion/przekroje.th2)
+
+Obrys łączy wyrównany poligon Survex z wymiarami odłożonymi przy stacji docelowej, prostopadle do dochodzącej celowej. Druga barwa ścian wyróżnia partie odtworzone z archiwum, m.in. drogę od E1 do Große Halle, Tropfsteincanyon i odgałęzienia przy stacji 65. Podkładem w edytorze jest fotografia planu 1:500 wyprostowana na siatce 50 m. Rycina 276 pozwoliła porównać starą część, a szkic Waagnera z 8 października 1985 r. uzupełnił rysunek Versturzzone. Brak wymiaru, opis i odczyt niepewny pozostawiono bez liczbowego zasięgu ściany. Na zakręcie Windkanal przy stacji 60 obrys odchodzi od kreski na fotografii. W tym miejscu przyjęto odczyt z karty 6 dla celowej 59–60 (6 m w lewo, 2 m w prawo). Linie konstrukcyjne z kart można pokazać na wydruku, zmieniając w [thconfig](1335-70/therion/thconfig) polecenie `symbol-hide line u:lrud` na `symbol-show line u:lrud`.
+
+Przekroje przy stacjach 30, 34, 52 i 72 mają skalę 1:300. Ich kształt pochodzi ze szkiców na kartach, a szerokość i wysokość z sum lewo + prawo i góra + dół. Wysokości przy otworach pochodzą z modelu Survex. Kreskowana oś przy Große Halle pokazuje [ciąg z karty 1](1335-70/therion/karta-1.th2) w przybliżonym położeniu. Wydruk w rozmiarze rzeczywistym zachowuje obie skale.
+
+Poniższe polecenia uruchamia się z katalogu głównego. Do składu potrzebne są Therion, MetaPost, pdfTeX i fonty Latin Modern.
+
+```sh
+cavern -w -o hagen.3d hagen.svx
+cd 1335-70/therion
+therion thconfig
+```
+
 ## Otwory
 
 Przyjęto WGS84 dla podanych długości i szerokości geograficznych. Wysokości zachowano w podanych metrach. Wynikowy układ poziomy to WGS84 / UTM 33N (EPSG:32633). Survex uwzględnia historyczną deklinację obliczoną dla miejsca i dat pomiarów oraz zbieżność południków.

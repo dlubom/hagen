@@ -1,0 +1,14 @@
+encoding utf-8
+survey kw -title "Kälbergruben-Windloch"
+  import ../../hagen.3d -surveys create -cs EPSG:32633
+  input przekroje.th2
+  input kalbergruben.th2
+  input karta-1.th2
+  map plan -projection plan
+    lokalny
+    jaskinia
+  endmap
+  map detale -projection [elevation 0]
+    panel
+  endmap
+endsurvey

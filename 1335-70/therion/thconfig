@@ -1,0 +1,125 @@
+encoding utf-8
+source kalbergruben.th
+select plan@kw
+select detale@kw
+layout druk
+  scale 1 750
+  base-scale 1 750
+  cs EPSG:32633
+  north grid
+  language pl
+  colour-model rgb
+  colour map-fg [95 96 93]
+  colour map-bg [100 100 100]
+  symbol-colour point label [12 20 22]
+  symbol-hide line u:lrud
+  symbol-hide point station
+  symbol-hide line survey:surface
+  symbol-show line survey:cave
+  symbol-assign area debris SKBB
+  symbol-colour area debris [62 61 51]
+  symbol-colour point blocks [36 39 34]
+  symbol-colour point debris [53 53 45]
+  symbol-colour line rock-border [36 39 34]
+  symbol-colour line contour [56 58 50]
+  symbol-colour line floor-step [37 41 38]
+  symbol-colour line pit [25 34 34]
+  fonts-setup 7 9 11 14 20
+  scale-bar 50 m
+  symbol-assign special scale-bar SM
+  map-header 0 100 off
+  doc-title "Kälbergruben-Windloch | 1335/70"
+  doc-subject "Plan jaskini i przekroje poprzeczne"
+  code metapost
+    def l_wall_bedrock(expr P) =
+      T:=identity;
+      if known ATTR_arch:
+        thdraw P withpen pencircle scaled 0.90bp withcolor (0.27,0.40,0.44);
+      else:
+        thdraw P withpen pencircle scaled 0.88bp withcolor (0.12,0.18,0.19);
+      fi;
+    enddef;
+    def l_survey_cave(expr P) =
+      T:=identity;
+      if (not ATTR__shotflag_duplicate) and (ATTR__scrap = "jaskinia"):
+        thdraw P withpen pencircle scaled 0.46bp withcolor (0.18,0.46,0.49);
+      fi;
+    enddef;
+    def l_u_lrud(expr P) =
+      T:=identity;
+      thdraw P withpen pencircle scaled 0.5bp withcolor (0.62,0.32,0.18);
+    enddef;
+    def l_u_lokalny(expr P) =
+      T:=identity;
+      thdraw P withpen pencircle scaled 0.95bp dashed evenly scaled 0.72 withcolor (0.65,0.28,0.10);
+    enddef;
+    def l_u_wymiar(expr P) =
+      T:=identity;
+      thdraw P withpen pencircle scaled 0.65bp withcolor (0.65,0.28,0.10);
+    enddef;
+    def l_u_odnosnik(expr P) =
+      T:=identity;
+      thdraw P withpen pencircle scaled 0.48bp withcolor (0.22,0.32,0.34);
+    enddef;
+    def p_u_otwor(expr pos,theta,sc,al) =
+      T:=identity;
+      thfill fullcircle scaled 5.6bp shifted pos withcolor white;
+      thdraw fullcircle scaled 5.6bp shifted pos withpen pencircle scaled 1.0bp withcolor (0.1,0.28,0.30);
+      thfill fullcircle scaled 2.7bp shifted pos withcolor (0.1,0.28,0.30);
+    enddef;
+    def p_u_przekroj(expr pos,theta,sc,al) =
+      T:=identity;
+      thfill fullcircle scaled 3.0bp shifted pos withcolor (0.10,0.35,0.37);
+      thdraw fullcircle scaled 3.0bp shifted pos withcolor white withpen pencircle scaled 0.45bp;
+    enddef;
+  endcode
+  code tex-map
+    \def\ink{\rgbcolor[10 19 20]}
+    \def\secondary{\rgbcolor[25 34 34]}
+    \def\copper{\rgbcolor[62 27 10]}
+    \def\band{\hbox{\vrule width\hsize height 0.55bp depth 0bp}}
+    \def\maplayout{%
+      \legendbox{0}{105}{SW}{\vbox{\hbox{\secondary\size[11] HAGENGEBIRGE\quad /\quad SALZBURG\qquad 1963–1985}\vskip5bp\hbox{\ink\size[36]\rm Kälbergruben-Windloch}}}%
+      \legendbox{100}{105}{SE}{\vbox{\halign{\hfil##\cr\ink\size[21] 1335/70\cr\noalign{\vskip5bp}\secondary\size[11] PLAN JASKINI\quad /\quad 1:750\cr}}}%
+      \legendbox{0}{103}{SW}{\vbox{\secondary\band}}%
+      \legendbox{90}{91}{C}{\vbox{\halign{\hfil##\hfil\cr\ink\size[13] N\cr\noalign{\vskip3bp}\northarrow\cr}}}%
+      \legendbox{90}{81}{C}{\scalebar}%
+      \legendbox{0}{-4}{NW}{\vbox{\secondary\band}}%
+      \legendbox{0}{-6}{NW}{\vbox{\hbox{\ink\size[12] Poligon podziemny}\vskip4bp\hbox{\ink\size[21] 1037,55 m}\vskip4bp\hbox{\secondary\size[10] 98 zmierzonych odcinków}}}%
+      \legendbox{18}{-6}{NW}{\vbox{\hbox{\ink\size[12] Legenda}\vskip5bp\hbox{\ink\vrule width 8mm height 0.9bp\quad\size[10] Obrys wed\char179{}ug LRUD i planu 1:500}\vskip3bp\hbox{\rgbcolor[27 40 44]\vrule width 8mm height 0.9bp\quad\size[10] Obrys z planu lub szkicu}\vskip3bp\hbox{\rgbcolor[18 46 49]\vrule width 8mm height 0.6bp\quad\size[10] Celowa pomiarowa}}}%
+      \legendbox{45}{-6}{NW}{\vbox{\hbox{\copper\size[12] Karta 1 przy Große Halle}\vskip5bp\hbox{\copper\size[10] Siedem celowych oznaczono kreskowo.}\vskip3bp\hbox{\secondary\size[10] Kreski poprzeczne podaj\char177{} szerokości.}\vskip3bp\hbox{\secondary\size[10] Dowi\char177{}zanie i wysokość wymagaj\char177{} potwierdzenia.}}}%
+      \legendbox{72}{-6}{NW}{\vbox{\hbox{\ink\size[12] Materia\char179{}y źród\char179{}owe}\vskip5bp\hbox{\secondary\size[10] Plan 1:500, archiwum LVH Salzburg.}\vskip3bp\hbox{\secondary\size[10] F. X. Koppenwallner i zespó\char179{}, 1963 (ryc. 276).}\vskip3bp\hbox{\secondary\size[10] W. Klappacher, H. Ager i W. Waagner, 1985.}}}%
+    }
+  endcode
+endlayout
+layout wstawka
+  copy druk
+  scale 1 300
+  base-scale 1 300
+  map-header 0 100 off
+  geospatial off
+  code tex-map
+    \def\maplayout{%
+      \legendbox{0}{104}{SW}{\vbox{\hbox{\ink\size[16] Przekroje poprzeczne}\vskip3bp\hbox{\secondary\size[9] Karty 4, 6 i 7\quad /\quad 1:300}}}%
+    }
+  endcode
+endlayout
+export map -projection [elevation 0] -layout wstawka -output przekroje-wstawka.pdf
+layout arkusz
+  copy druk
+  code tex-map
+    \savepath{przekroje}{przekroje-wstawka.pdf}
+    \let\skladglowny\maplayout
+    # Wyśrodkuj arkusz na A2, zachowując skalę mapy i georeferencję Theriona.
+    \def\maplayout{%
+      \skladglowny\legendbox{17}{89}{NW}{\loadpicture{przekroje}}%
+      \dimen0=594mm \advance\dimen0 by -\pdfpagewidth
+      \advance\dimen0 by -\extraW \advance\dimen0 by -\extraE \divide\dimen0 by 2
+      \ifdim\dimen0>0pt \global\advance\extraW by \dimen0 \global\advance\extraE by \dimen0 \fi
+      \dimen0=420mm \advance\dimen0 by -\pdfpageheight
+      \advance\dimen0 by -\extraN \advance\dimen0 by -\extraS \divide\dimen0 by 2
+      \ifdim\dimen0>0pt \global\advance\extraN by \dimen0 \global\advance\extraS by \dimen0 \fi
+    }
+  endcode
+endlayout
+export map -projection plan -layout arkusz -output kalbergruben-plan.pdf

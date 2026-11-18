@@ -1,0 +1,50 @@
+encoding utf-8
+##XTHERION## xth_me_area_adjust 850 380 1300 720
+##XTHERION## xth_me_image_insert {0 1 1.0} {1060} podklad-1-500.png 0 {}
+
+# Karta 1. Położenie przestrzenne z roboczego dowiązania w hagen.svx.
+scrap lokalny -projection plan -scale [0 0 400 0 0 0 100 0 m]
+point 1206.44 527.00 station -name a@local
+point 1192.80 525.28 station -name b@local
+point 1179.32 515.48 station -name c@local
+point 1234.80 607.20 station -name 0@local
+point 1168.52 538.80 station -name 1@local
+point 1172.68 512.72 station -name 2@local
+point 1176.80 509.60 station -name 3@local
+point 1168.20 502.48 station -name 4@local
+line u:lokalny -clip off -place top
+  1234.80 607.20
+  1168.52 538.80
+  1172.68 512.72
+  1176.80 509.60
+  1168.20 502.48
+endline
+
+line u:lokalny -clip off -place top
+  1172.68 512.72
+  1179.32 515.48
+  1192.80 525.28
+  1206.44 527.00
+endline
+
+line u:wymiar -clip off
+  1182.88 524.88
+  1151.28 555.50
+endline
+
+line u:wymiar -clip off
+  1176.63 513.35
+  1172.68 512.72
+endline
+
+line u:wymiar -clip off
+  1176.80 509.60
+  1174.39 506.41
+endline
+
+line u:wymiar -clip off
+  1169.22 501.25
+  1168.20 502.48
+endline
+
+endscrap
