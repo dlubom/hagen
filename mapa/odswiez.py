@@ -8,6 +8,7 @@ import xml.etree.ElementTree as ET
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 GPX = HERE / "zrodla" / "Hagengebirge-2025-8.gpx"
+REGIONAL = HERE / "zrodla" / "h2026.geojson"
 HTML = HERE / "index.html"
 
 
@@ -15,7 +16,7 @@ def location(node):
     return [float(node.attrib["lat"]), float(node.attrib["lon"])]
 
 
-def gpx_data():
+def gpx_points():
     root = ET.parse(GPX).getroot()
     waypoints = []
     for node in root.findall("{*}wpt"):
@@ -25,18 +26,7 @@ def gpx_data():
             if value and not (field == "cmt" and value == item.get("desc")):
                 item[field] = value
         waypoints.append(item)
-    paths = []
-    for kind, groups in (
-        ("Ślad GPX", [(e, e.findall("{*}trkseg"), "trkpt") for e in root.findall("{*}trk")]),
-        ("Trasa GPX", [(e, [e], "rtept") for e in root.findall("{*}rte")]),
-    ):
-        for node, segments, point_tag in groups:
-            paths.append({
-                "name": node.findtext("{*}name") or kind,
-                "kind": kind,
-                "segments": [[location(pt) for pt in seg.findall("{*}" + point_tag)] for seg in segments],
-            })
-    return waypoints, paths
+    return waypoints
 
 
 def cave_data(model_path=ROOT / "hagen.3d"):
@@ -76,9 +66,9 @@ def cave_data(model_path=ROOT / "hagen.3d"):
 
 
 def main():
-    points, tracks = gpx_data()
     stations, legs, controls = cave_data()
-    data = dict(points=points, tracks=tracks, stations=stations, legs=legs, controls=controls)
+    data = dict(points=gpx_points(), regional=json.loads(REGIONAL.read_text()),
+                stations=stations, legs=legs, controls=controls)
     encoded = json.dumps(data, separators=(",", ":"), ensure_ascii=False).replace("<", "\\u003c")
     before, marker, tail = HTML.read_text(encoding="utf-8").partition('<script id="map-data" type="application/json">')
     if not marker or "</script>" not in tail:

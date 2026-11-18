@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Kälbergruben-Windloch · Mapa</title>
+  <title>Hagengebirge · Mapa 2D</title>
   <link rel="icon" href="../assets/poligon.png">
   <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
   <link rel="stylesheet" href="map.css">
@@ -21,14 +21,26 @@
       <select id="basemap">
         <option value="topo">Mapa z poziomicami</option>
         <option value="ortho">Ortofotomapa Austrii</option>
+        <option value="geology">Mapa geologiczna 1:50 000</option>
         <option value="none">Bez podkładu</option>
       </select>
+      <details id="geology-info" hidden>
+        <summary>Arkusze z legendami</summary>
+        <ul>
+          <li><a href="https://gis.geosphere.at/portal/sharing/rest/content/items/998c891b0eef4c22a230c3bb82732cb2/data" target="_blank" rel="noopener">93 · Bad Reichenhall</a></li>
+          <li><a href="https://gis.geosphere.at/portal/sharing/rest/content/items/7805998b5d0c470b9c5b219eaa890a2d/data" target="_blank" rel="noopener">94 · Hallein</a></li>
+          <li><a href="https://gis.geosphere.at/portal/sharing/rest/content/items/026209c658a141d1a9c5f7dfbaddeefb/data" target="_blank" rel="noopener">124 · Saalfelden</a></li>
+          <li><a href="https://gis.geosphere.at/portal/sharing/rest/content/items/3737b2c4c1a74771b9b244844312367e/data" target="_blank" rel="noopener">125 · Bischofshofen</a></li>
+        </ul>
+      </details>
       <label class="section-label" for="plan">Plan jaskini</label>
       <select id="plan"><option value="">Bez planu</option></select>
       <label class="range-label" for="opacity">Krycie planu <output id="opacity-value" for="opacity">90%</output></label>
       <input type="range" min="0" max="100" value="90" id="opacity">
       <details id="plan-info"><summary>Georeferencja i źródło</summary><p id="plan-note"></p><p id="plan-credit"></p></details>
       <fieldset id="overlays"><legend>Dane pomiarowe</legend></fieldset>
+      <label class="section-label" for="survey-cave">Ciągi jaskiń z h2026</label>
+      <select id="survey-cave"><option value="">Przybliż jaskinię…</option></select>
       <label class="section-label" for="search">Wyszukaj punkt GPX</label>
       <input type="search" id="search" placeholder="Nazwa punktu…" autocomplete="off" aria-controls="matches">
       <ul id="matches" hidden aria-label="Wyniki wyszukiwania"></ul>

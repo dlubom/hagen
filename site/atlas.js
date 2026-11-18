@@ -16,7 +16,10 @@ function showTab() {
       panel.append(frame);
     }
   }
-  document.title = active.textContent + ' · Kälbergruben-Windloch';
+  const isMap = active.id === 'tab-mapa';
+  document.getElementById('cave-number').hidden = isMap;
+  document.querySelector('h1').textContent = isMap ? 'Jaskinie masywu' : 'Kälbergruben-Windloch';
+  document.title = active.textContent + (isMap ? ' · Hagengebirge' : ' · Kälbergruben-Windloch');
 }
 
 document.querySelector('[role="tablist"]').addEventListener('keydown', event => {

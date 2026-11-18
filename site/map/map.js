@@ -5,7 +5,7 @@ const map = L.map('map', { zoomControl: false, trackResize: false, minZoom: 5, m
 const dataRoot = new URL('./data/', document.baseURI);
 const layersButton = el('layers-button');
 const panel = el('layers');
-const colors = { underground: '#964159', surface: '#c77a15', tracks: '#21765b', gps: '#166994', entrances: '#edba63' };
+const colors = { underground: '#964159', surface: '#c77a15', regional: '#286466', gps: '#166994', entrances: '#edba63' };
 const baseSpecs = { topo: ['bmapgrau', 'png'], ortho: ['bmaporthofoto30cm', 'jpeg'] };
 let basemap, planLayer, caveBounds, massifBounds;
 
@@ -35,52 +35,66 @@ window.addEventListener('keydown', (event) => {
 
 function changeBasemap() {
   if (basemap) map.removeLayer(basemap);
+  basemap = null;
   el('tile-status').hidden = true;
-  const spec = baseSpecs[el('basemap').value];
-  if (!spec) return;
-  const [id, format] = spec;
-  const layer = L.tileLayer('https://mapsneu.wien.gv.at/basemap/' + id + '/normal/google3857/{z}/{y}/{x}.' + format, {
-    minZoom: 5, maxNativeZoom: 19, maxZoom: 23, noWrap: true,
-    attribution: 'Data source: <a href="https://basemap.at/">basemap.at</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>'
-  });
+  const selected = el('basemap').value;
+  el('geology-info').hidden = selected !== 'geology';
+  if (selected === 'none') return;
+  const options = { minZoom: 5, maxZoom: 23, noWrap: true };
+  let tiles;
+  if (selected === 'geology') {
+    const attribution = '© <a href="https://www.geosphere.at/">GeoSphere Austria</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>';
+    tiles = [['karte_geofast_50', 16], ['karte_50', 15]].map(([series, maxNativeZoom]) =>
+      L.tileLayer('https://gis.geosphere.at/images/rest/services/geologie/' + series + '/ImageServer/tile/{z}/{y}/{x}',
+        { ...options, maxNativeZoom, attribution }));
+  } else {
+    const [id, format] = baseSpecs[selected];
+    tiles = [L.tileLayer('https://mapsneu.wien.gv.at/basemap/' + id + '/normal/google3857/{z}/{y}/{x}.' + format, {
+      ...options, maxNativeZoom: 19,
+      attribution: 'Data source: <a href="https://basemap.at/">basemap.at</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>'
+    })];
+  }
+  const group = L.layerGroup(tiles);
   const failures = new Set();
   function tileStatus() {
-    if (layer !== basemap) return;
+    if (group !== basemap) return;
     el('tile-status').hidden = failures.size === 0;
-    el('tile-status').textContent = 'Część podkładu basemap.at jest niedostępna.';
+    el('tile-status').textContent = 'Nie udało się wczytać części podkładu.';
   }
-  layer.on('tileerror', (e) => { failures.add(e.tile); tileStatus(); });
-  layer.on('tileunload', (e) => { failures.delete(e.tile); tileStatus(); });
-  basemap = layer;
-  layer.addTo(map);
+  for (const tileLayer of tiles) {
+    tileLayer.on('tileerror', (e) => { failures.add(e.tile); tileStatus(); });
+    tileLayer.on('tileunload', (e) => { failures.delete(e.tile); tileStatus(); });
+  }
+  basemap = group;
+  group.addTo(map);
 }
 el('basemap').addEventListener('change', changeBasemap);
 changeBasemap();
 
-function frame(extent) {
-  const bounds = extent === 'cave' ? caveBounds : massifBounds;
+function frame(bounds, maxZoom = 19) {
   if (!bounds?.isValid() || !map.getSize().x || !map.getSize().y) return;
+  map.closePopup();
   const panelWidth = !panel.hidden && map.getSize().x >= 800 ? panel.offsetWidth + 30 : 20;
   map.fitBounds(bounds, {
     paddingTopLeft: [panelWidth, 56],
     paddingBottomRight: [25, 34],
-    maxZoom: extent === 'cave' ? 19 : 15,
+    maxZoom,
     animate: false
   });
 }
 el('cave').addEventListener('click', () => {
   if (map.getSize().x < 800) panelOpen(false);
-  frame('cave');
+  frame(caveBounds);
 });
 el('massif').addEventListener('click', () => {
   if (map.getSize().x < 800) panelOpen(false);
-  frame('massif');
+  frame(massifBounds, 15);
 });
 new ResizeObserver(() => {
   const container = map.getContainer();
   if (!container.clientWidth || !container.clientHeight) return;
   map.invalidateSize({ animate: false });
-  if (map.getZoom() === undefined) frame('cave');
+  if (map.getZoom() === undefined) frame(caveBounds);
 }).observe(el('map'));
 
 const number = (n, digits = 0) => n.toLocaleString('pl-PL', { maximumFractionDigits: digits });
@@ -147,7 +161,14 @@ function setPlans(plans) {
       el('status').hidden = false;
     }).on('load', () => { el('status').hidden = true; }).addTo(map);
   }
-  select.addEventListener('change', update);
+  select.addEventListener('change', () => {
+    update();
+    if (!planLayer) return;
+    caveBounds = planLayer.getBounds();
+    el('survey-cave').value = '';
+    if (map.getSize().x < 800) panelOpen(false);
+    frame(caveBounds);
+  });
   el('opacity').addEventListener('input', () => {
     el('opacity-value').textContent = el('opacity').value + '%';
     planLayer?.setOpacity(Number(el('opacity').value) / 100);
@@ -199,18 +220,22 @@ async function readJson(path) {
 
 async function load() {
   const manifest = await readJson('map.json');
-  const [gps, tracks, surveys, controls] = await Promise.all(
-    [manifest.gps, manifest.tracks, manifest.surveys, manifest.controls].map(readJson)
+  const [gps, regional, surveys, controls] = await Promise.all(
+    [manifest.gps, manifest.regional, manifest.surveys, manifest.controls].map(readJson)
   );
   const surveyOptions = (surface) => ({
     filter: (feature) => feature.properties.surface === surface,
     style: { color: surface ? colors.surface : colors.underground, weight: 3, dashArray: surface ? '6 5' : undefined },
     onEachFeature: (f, l) => l.bindPopup(() => element('p', (surface ? 'Powierzchnia' : 'Pod ziemią') + ' · ' + f.properties.from + ' — ' + f.properties.to))
   });
-  const trackLayer = L.geoJSON(tracks, {
-    style: { color: colors.tracks, weight: 2, opacity: 0.78, dashArray: '5 5' },
-    onEachFeature: (f, l) => l.bindPopup(() => element('p', f.properties.kind + ' · ' + f.properties.name))
-  });
+  const regionalLayer = L.geoJSON(regional, {
+    style: { color: colors.regional, weight: 3 },
+    onEachFeature: (f, l) => l.bindPopup(() => {
+      const popup = element('div', '');
+      popup.append(element('h2', f.properties.name), element('p', 'Podziemne odcinki pomiarowe · ' + number(f.properties.legs)));
+      return popup;
+    }, popupOptions)
+  }).on('add', () => regionalLayer.bringToBack());
   const gpsLayer = L.geoJSON(gps, {
     pointToLayer: (f, ll) => L.circleMarker(ll, {
       radius: f.properties.station ? 6 : 4, color: '#fff', weight: 1.4, fillColor: colors.gps, fillOpacity: 0.95
@@ -232,18 +257,27 @@ async function load() {
     marker.bindPopup(() => entrancePopup(control, model, gpx), popupOptions);
     entranceLayer.addLayer(marker);
   }
-  // Keep GPX tracks below the cave survey even when their switch is toggled.
-  map.createPane('tracks').style.zIndex = 390;
-  trackLayer.eachLayer((path) => { path.options.pane = 'tracks'; });
   caveBounds = underground.getBounds().extend(surface.getBounds());
-  massifBounds = gpsLayer.getBounds().extend(trackLayer.getBounds()).extend(caveBounds);
-  frame('cave');
+  massifBounds = gpsLayer.getBounds().extend(regionalLayer.getBounds()).extend(caveBounds);
+  for (const plan of manifest.plans) massifBounds.extend(plan.bounds);
+  frame(caveBounds);
   setPlans(manifest.plans);
-  addToggle('Otwory jaskini', 'entrances', entranceLayer);
-  addToggle('Poligon podziemny', 'underground', underground);
-  addToggle('Poligon powierzchniowy', 'surface', surface);
+  addToggle('Otwory 1335/70', 'entrances', entranceLayer);
+  addToggle('Poligon podziemny 1335/70', 'underground', underground);
+  addToggle('Poligon powierzchniowy 1335/70', 'surface', surface);
   const gpsToggle = addToggle('Punkty GPX', 'gps', gpsLayer);
-  addToggle('Ślady i trasy GPX', 'tracks', trackLayer);
+  const regionalToggle = addToggle('Ciągi jaskiń · h2026', 'regional', regionalLayer);
+  const caves = regionalLayer.getLayers().sort((a, b) => a.feature.properties.name.localeCompare(b.feature.properties.name, 'pl', { numeric: true }));
+  const select = el('survey-cave');
+  caves.forEach((layer, i) => select.add(new Option(layer.feature.properties.name, String(i))));
+  select.addEventListener('change', () => {
+    if (!select.value) return;
+    regionalToggle.checked = true;
+    regionalLayer.addTo(map);
+    caveBounds = caves[Number(select.value)].getBounds();
+    if (map.getSize().x < 800) panelOpen(false);
+    frame(caveBounds);
+  });
   setSearch(gpsLayer.getLayers(), gpsLayer, gpsToggle);
   el('status').hidden = true;
 }

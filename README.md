@@ -33,7 +33,11 @@ Punktem stałym jest dolny otwór. Górny pozostaje kontrolą zewnętrzną. Od d
 
 ## Mapa masywu i jaskini
 
-Na [GitHub Pages](https://dlubom.github.io/hagen/) zakładka **Model 3D** pokazuje poligon Survex w CaveView na tle terenu z austriackiego skanowania laserowego BEV. Można zmieniać krycie terenu oraz przełączać odcinki podziemne i powierzchniowe. W zakładce **Mapa 2D** można nałożyć plan 1:500 lub rycinę z 1963 r. na mapę z poziomicami albo ortofotomapę. Kliknięcie otworu pokazuje podane współrzędne, rekord GPX i położenie obliczone przez Survex. Opis dopasowania znajduje się przy każdym planie.
+Na [GitHub Pages](https://dlubom.github.io/hagen/) zakładka **Model 3D** pokazuje poligon Kälbergruben-Windloch w CaveView na tle terenu z austriackiego skanowania laserowego BEV. Można zmieniać krycie terenu oraz przełączać odcinki podziemne i powierzchniowe.
+
+W zakładce **Mapa 2D** wybór planu przenosi widok do jaskini. Dostępne są plan 1:500 i rycina z 1963 r. dla Kälbergruben-Windloch oraz rzut Tantalhöhle (1335/30) narysowany przez W. Waagnera w 1979 r. Rzut Tantalhöhle dowiązano do punktu GPX `Tantalhohle_30` przy otworze opisanym na planie jako 1710 m. Skalę wyznacza drukowana siatka 500 m, a orientację kierunek od otworu do dawnego punktu 302 w Riesenhalle. W niezależnym punkcie kontrolnym 231 przy Seufzertreppe różnica wynosi 49 m. [Georeferencja Tantalhöhle i identyfikacja obu punktów](1335-30/georeferencja.md)
+
+W menu **Podkład** można wybrać mapę z poziomicami, ortofotomapę lub mapę geologiczną GeoSphere Austria 1:50 000. Lista **Ciągi jaskiń z h2026** przybliża wybraną jaskinię. Warstwa zawiera 9724 podziemne odcinki dla 60 obiektów. Kliknięcie ciągu pokazuje nazwę i liczbę odcinków. Aby odświeżyć warstwę z lokalnej kopii gałęzi `h2026`, uruchom `python3 scripts/import_h2026.py /ścieżka/do/test2`. [Źródłowy projekt Survex](https://github.com/dlubom/test2/tree/ec21231914280347e05cedd10d9e9aff55955d89)
 
 GitHub Actions po zmianie na `main` kompiluje `hagen.svx`, generuje warstwy mapy z tego samego modelu, GPX i fotografii planów oraz publikuje całość. Do lokalnego podglądu potrzebne są Survex 1.4.24, PROJ (`cs2cs`), Python z NumPy i OpenCV oraz `curl` do pobrania CaveView.
 
@@ -42,9 +46,9 @@ python3 scripts/build_pages.py
 python3 -m http.server --directory build/pages 8000
 ```
 
-[Otwórz mapę HTML](mapa/index.html) w przeglądarce. Plik działa offline i zawiera cieniowaną rzeźbę terenu z poziomicami, wszystkie 1063 punkty i 11 śladów z GPX (2762 wierzchołki) oraz główny poligon Survex. Widok jaskini pokazuje otwory, przebieg pod ziemią i ciąg powierzchniowy. Znaczniki otworów pozwalają porównać współrzędne podane przez użytkownika, rekordy GPX i wynik kompilacji.
+[Mapa HTML do pracy offline](mapa/index.html) zawiera cieniowaną rzeźbę terenu z poziomicami, wszystkie 1063 punkty GPX, główny poligon Survex i ciągi jaskiń z h2026. Znaczniki otworów Kälbergruben-Windloch pozwalają porównać podane współrzędne, rekordy GPX i wynik kompilacji.
 
-W GPX dolny otwór `Kalbergrube_70-d` leży 2,6 m od podanej pozycji i ma wysokość 1662 m. Górny `Kalbergrube_70-g` leży 1,8 m od podanej pozycji i ma wysokość 1733 m. Po zmianie GPX lub rekompilacji modelu dane mapy można odświeżyć poleceniem `python3 mapa/odswiez.py` (wymaga `dump3d` i `cs2cs`). [Oryginalny GPX](mapa/zrodla/Hagengebirge-2025-8.gpx)
+W GPX dolny otwór `Kalbergrube_70-d` leży 2,6 m od podanej pozycji i ma wysokość 1662 m. Górny `Kalbergrube_70-g` leży 1,8 m od podanej pozycji i ma wysokość 1733 m. Po zmianie danych wejściowych mapę offline można odświeżyć poleceniem `python3 mapa/odswiez.py` (wymaga `dump3d` i `cs2cs`). [GPX z punktami](mapa/zrodla/Hagengebirge-2025-8.gpx)
 
 ## Kontrola digitalizacji
 

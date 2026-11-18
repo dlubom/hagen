@@ -4,6 +4,7 @@ import argparse
 import json
 from pathlib import Path
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -11,10 +12,12 @@ import tempfile
 import cv2
 import numpy as np
 
+from tantal_plan import tantal_plan
+
 ROOT = Path(__file__).resolve().parents[1]
 CAVE = ROOT / "1335-70"
 sys.path.insert(0, str(ROOT / "mapa"))
-from odswiez import cave_data, gpx_data  # noqa: E402 — shared with the offline map
+from odswiez import REGIONAL, cave_data, gpx_points  # noqa: E402 — shared with the offline map
 
 
 def write_json(path, data, indent=None):
@@ -39,10 +42,9 @@ def feature(geometry, coordinates, **properties):
     }
 
 
-def vectors(output, model_path):
-    points, tracks = gpx_data()
+def vectors(output, model_path, points):
     stations, legs, controls = cave_data(model_path)
-    gps, paths, surveys, entrances = [], [], [], []
+    gps, surveys, entrances = [], [], []
     names = {"Kalbergrube_70-d": "kgw.e1", "Kalbergrube_70-g": "kgw.e2"}
     for point in points:
         lat, lon = point["ll"]
@@ -52,18 +54,6 @@ def vectors(output, model_path):
         if props.get("name") in names:
             props["station"] = names[props["name"]]
         gps.append(feature("Point", [lon, lat], **props))
-    for track in tracks:
-        segments = [
-            [[lon, lat] for lat, lon in segment]
-            for segment in track["segments"]
-            if len(segment) >= 2
-        ]
-        if segments:
-            paths.append(
-                feature(
-                    "MultiLineString", segments, name=track["name"], kind=track["kind"]
-                )
-            )
     for start, end, surface in legs:
         coords = [[stations[s][1], stations[s][0]] for s in (start, end)]
         surveys.append(
@@ -79,7 +69,7 @@ def vectors(output, model_path):
                     "Point", [lon, lat], kind=kind, station=station, name=label, ele=ele
                 )
             )
-    datasets = {"gps": gps, "tracks": paths, "surveys": surveys, "controls": entrances}
+    datasets = {"gps": gps, "surveys": surveys, "controls": entrances}
     manifest = {}
     for key, features in datasets.items():
         filename = ("entrances" if key == "controls" else key) + ".geojson"
@@ -87,6 +77,8 @@ def vectors(output, model_path):
             output / filename, {"type": "FeatureCollection", "features": features}
         )
         manifest[key] = filename
+    shutil.copyfile(REGIONAL, output / REGIONAL.name)
+    manifest["regional"] = REGIONAL.name
     return manifest
 
 
@@ -101,7 +93,7 @@ def node_locations(path):
 
 def transform_coords(source, target, coords):
     rows = subprocess.check_output(
-        ["cs2cs", source, target, "-f", "%.10f"],
+        ["cs2cs", source, "+to", target, "-f", "%.10f"],
         input="".join(f"{p.real:.10f} {p.imag:.10f}\n" for p in coords),
         text=True,
     ).splitlines()
@@ -376,7 +368,7 @@ def plan_layers(output, model_path):
     return [
         {
             "id": "plan-1985",
-            "title": "Plan 1:500 · 1963/1985",
+            "title": "Kälbergruben-Windloch · 1963/1985",
             "image": "plan-1985.png",
             "bounds": main_bounds,
             "note": "Dopasowanie do 40 przecięć siatki 50 m i głównego poligonu Survex. Dolny otwór ustala położenie. Fałdy papieru i perspektywa zdjęcia ograniczają dokładność.",
@@ -384,7 +376,7 @@ def plan_layers(output, model_path):
         },
         {
             "id": "plan-1963",
-            "title": "Stare partie · 1963",
+            "title": "Kälbergruben-Windloch · stare partie 1963",
             "image": "plan-1963.png",
             "bounds": book_bounds,
             "note": "Ryc. 276 przeniesiono na plan zbiorczy według sześciu szczegółów ścian. Przy bocznej odnodze Große Halle różnica wynosi około 6 m.",
@@ -409,8 +401,10 @@ def main():
     )
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=True)
-    manifest = vectors(args.output, args.model)
+    points = gpx_points()
+    manifest = vectors(args.output, args.model, points)
     manifest["plans"] = plan_layers(args.output, args.model)
+    manifest["plans"].append(tantal_plan(args.output, points, transform_coords))
     write_json(args.output / "map.json", manifest, 2)
 
 
