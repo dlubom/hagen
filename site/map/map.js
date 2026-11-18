@@ -67,6 +67,15 @@ function changeBasemap() {
     tiles = geologySpecs[selected].map(([series, maxNativeZoom]) =>
       L.tileLayer('https://gis.geosphere.at/images/rest/services/geologie/' + series + '/ImageServer/tile/{z}/{y}/{x}',
         { ...options, maxNativeZoom, attribution: geoSphereAttribution }));
+    if (selected === 'geology') {
+      // The LfU vector layers render transparently outside their Bavarian coverage.
+      tiles.push(L.tileLayer.wms('https://www.lfu.bayern.de/gdi/wms/geologie/dgk25', {
+        ...options, minZoom: 11, minNativeZoom: 12, maxNativeZoom: 18, tileSize: 512, zIndex: 2,
+        bounds: [[47.15, 8.79], [50.68, 14.06]],
+        layers: 'geoleinheit_dgk25,strukturln_dgk25', version: '1.3.0', format: 'image/png', transparent: true,
+        attribution: '© <a href="https://www.lfu.bayern.de/">Bayerisches Landesamt für Umwelt</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>'
+      }));
+    }
   } else if (selected === 'sagis-1952') {
     tiles = [new SagisArchiveLayer('https://service.salzburg.gv.at/arcgis/rest/services/HistOrthofotos_Land_Salzburg/MapServer/export', {
       ...options, tileSize: 512, maxNativeZoom: 18, bounds: [[46.92, 12.01], [48.07, 14.02]],
