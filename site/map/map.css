@@ -16,9 +16,9 @@ button { background: var(--paper); border: 0; }
 button:hover, summary:hover { color: #00725d; }
 :focus-visible { outline: 3px solid #168278; outline-offset: 2px; }
 [hidden] { display: none !important; }
-.dock, .extent, .messages { position: absolute; z-index: 800; }
-.dock { top: 14px; left: 14px; max-width: calc(100% - 28px); }
-#layers-button, .extent, #layers { background: var(--paper); box-shadow: var(--shadow); border: 1px solid #a7b4a7; border-radius: 6px; }
+.dock, .map-tools, .messages { position: absolute; z-index: 800; }
+.dock { top: 14px; left: 14px; z-index: 801; max-width: calc(100% - 28px); }
+#layers-button, .extent, #layers, #measure, #measurement { background: var(--paper); box-shadow: var(--shadow); border: 1px solid #a7b4a7; border-radius: 6px; }
 #layers-button { display: flex; align-items: center; gap: 9px; min-height: 38px; padding: 6px 12px; font-size: 14px; font-weight: 650; }
 .layer-icon { position: relative; top: -2px; font: bold 22px/20px Arial,sans-serif; text-shadow: 0 3px var(--paper), 0 4.5px var(--green); }
 .chevron { width: 6px; height: 6px; margin-left: 6px; transform: rotate(45deg); border-right: 1.5px solid; border-bottom: 1.5px solid; }
@@ -31,6 +31,7 @@ select, input[type=search] { width: 100%; min-height: 33px; margin: 5px 0 0; bor
 input[type=range] { width: 100%; margin: 3px 0; accent-color: var(--green); }
 details { color: var(--muted); font-size: 12px; }
 details p { line-height: 1.45; margin: 6px 0 0; }
+#plan-sources h3 { font-size: 12px; margin: 10px 0 4px; color: var(--green); }
 #geology-info { margin-top: 6px; }
 #geology-info ul { margin: 4px 0; padding-left: 18px; line-height: 1.6; }
 #geology-info a { color: var(--green); }
@@ -45,10 +46,21 @@ legend { margin: 0 0 4px; padding: 0; }
 #matches { padding: 2px 0; margin: 0; list-style: none; }
 #matches button, #matches .empty { display: block; width: 100%; text-align: left; padding: 6px; font-size: 12px; overflow-wrap: anywhere; }
 #matches button:hover { background: #e7ece4; }
-.extent { display: flex; top: 14px; right: 14px; overflow: hidden; }
-.extent button { min-height: 36px; padding: 6px 11px; font-size: 13px; font-weight: 620; }
+.map-tools { top: 14px; right: 14px; display: grid; justify-items: end; gap: 5px; pointer-events: none; }
+.map-tools > * { pointer-events: auto; }
+.extent { display: flex; overflow: hidden; }
+.extent button, #measure { min-height: 36px; padding: 6px 11px; font-size: 13px; font-weight: 620; }
 .extent button + button { border-left: 1px solid var(--line); }
 .extent button:focus-visible { outline-offset: -3px; }
+#measure:disabled, #measure-clear:disabled { opacity: .55; cursor: default; }
+#map.is-measuring ~ .map-tools #measure { background: var(--green); color: white; }
+#measurement { width: min(220px, calc(100vw - 28px)); padding: 9px 11px; font-size: 13px; }
+#measure-hint { margin: 0 0 5px; color: var(--muted); }
+#measure-result { display: block; margin-bottom: 5px; font-weight: 650; font-variant-numeric: tabular-nums; }
+#measure-clear { border: 1px solid var(--line); border-radius: 4px; min-height: 28px; padding: 3px 7px; }
+#map.is-measuring { cursor: crosshair; }
+#map.is-measuring .leaflet-overlay-pane canvas,
+#map.is-measuring .leaflet-marker-icon.leaflet-interactive { pointer-events: none; }
 .messages { bottom: 32px; right: 58px; max-width: min(360px, 70%); pointer-events: none; }
 .messages p, noscript { background: var(--paper); color: var(--green); border: 1px solid #b8c5b4; border-radius: 4px; padding: 7px 10px; font-size: 13px; line-height: 1.4; }
 noscript { position: absolute; z-index: 1000; top: 20%; left: 10%; }
@@ -69,8 +81,8 @@ noscript { position: absolute; z-index: 1000; top: 20%; left: 10%; }
 .entrance-label:before { display: none; }
 @media (max-width: 560px) {
   .dock { left: 8px; top: 8px; }
-  .extent { right: 8px; top: 8px; }
+  .map-tools { right: 8px; top: 8px; }
   #layers { max-height: calc(100dvh - 56px); width: 232px; }
-  .extent button, #layers-button { min-height: 40px; }
+  .extent button, #layers-button, #measure, #measure-clear { min-height: 40px; }
   .check { min-height: 32px; }
 }

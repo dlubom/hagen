@@ -7,7 +7,7 @@ const layersButton = el('layers-button');
 const panel = el('layers');
 const colors = { underground: '#964159', surface: '#c77a15', synthetic: '#c11265', regional: '#286466', gps: '#166994', entrances: '#edba63' };
 const baseSpecs = { topo: ['bmapgrau', 'png'], ortho: ['bmaporthofoto30cm', 'jpeg'] };
-let basemap, planLayer, caveBounds, massifBounds;
+let basemap, caveBounds, massifBounds;
 
 L.control.zoom({ position: 'bottomright', zoomInTitle: 'Przybliż', zoomOutTitle: 'Oddal' }).addTo(map);
 L.control.scale({ imperial: false, maxWidth: 120 }).addTo(map);
@@ -26,12 +26,6 @@ function panelOpen(open) {
 }
 panelOpen(window.matchMedia('(min-width: 800px) and (min-height: 480px)').matches);
 layersButton.addEventListener('click', () => panelOpen(panel.hidden));
-window.addEventListener('keydown', (event) => {
-  if (event.key === 'Escape' && !panel.hidden) {
-    panelOpen(false);
-    layersButton.focus();
-  }
-});
 
 function changeBasemap() {
   if (basemap) map.removeLayer(basemap);
@@ -100,6 +94,83 @@ new ResizeObserver(() => {
 const number = (n, digits = 0) => n.toLocaleString('pl-PL', { maximumFractionDigits: digits });
 const coord = ([lon, lat]) => lat.toFixed(6) + '° N, ' + lon.toFixed(6) + '° E';
 const popupOptions = { maxWidth: 340, minWidth: 160 };
+
+function setMeasurement() {
+  const button = el('measure');
+  const section = el('measurement');
+  const hint = el('measure-hint');
+  const result = el('measure-result');
+  const clear = el('measure-clear');
+  const container = map.getContainer();
+  const pane = map.createPane('measurement');
+  pane.style.zIndex = 625;
+  pane.style.pointerEvents = 'none';
+  const style = { pane: 'measurement', color: '#007481', interactive: false };
+  const line = L.polyline([], { ...style, weight: 4 }).addTo(map);
+  const points = L.layerGroup().addTo(map);
+  let active = false;
+  let lastPoint = null;
+  let distance = 0;
+
+  function render() {
+    section.hidden = !active && distance === 0;
+    hint.hidden = !active;
+    result.hidden = distance === 0;
+    result.textContent = distance === 0 ? '' : 'Długość w rzucie · ' + (distance < 1000
+      ? number(distance, 1) + ' m' : number(distance / 1000, 2) + ' km');
+    clear.disabled = !lastPoint;
+  }
+
+  function reset() {
+    lastPoint = null;
+    distance = 0;
+    line.setLatLngs([]);
+    points.clearLayers();
+  }
+
+  function setActive(measuring) {
+    active = measuring;
+    button.textContent = active ? 'Zakończ pomiar' : 'Miarka';
+    container.classList.toggle('is-measuring', active);
+    if (active) {
+      reset();
+      if (map.getSize().x < 800) panelOpen(false);
+      map.closePopup();
+      map.doubleClickZoom.disable();
+    } else {
+      if (distance === 0) reset();
+      map.doubleClickZoom.enable();
+    }
+    render();
+  }
+
+  map.on('click', ({ latlng }) => {
+    if (!active || lastPoint?.equals(latlng)) return;
+    if (lastPoint) distance += map.distance(lastPoint, latlng);
+    lastPoint = latlng;
+    line.addLatLng(latlng);
+    points.addLayer(L.circleMarker(latlng, { ...style, radius: 4, weight: 2, fillColor: '#fff', fillOpacity: 1 }));
+    render();
+  });
+  button.addEventListener('click', () => setActive(!active));
+  clear.addEventListener('click', () => {
+    reset();
+    render();
+    button.focus();
+  });
+  window.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return;
+    if (active) {
+      setActive(false);
+      button.focus();
+    } else if (!panel.hidden) {
+      panelOpen(false);
+      layersButton.focus();
+    }
+  });
+}
+setMeasurement();
+
 function gpsPopup(feature) {
   const p = feature.properties;
   const popup = element('div', '');
@@ -142,36 +213,54 @@ function addToggle(label, key, layer) {
 
 function setPlans(plans) {
   const select = el('plan');
+  const opacity = el('opacity');
+  const info = el('plan-info');
+  const sources = el('plan-sources');
+  const status = el('plan-status');
+  const layers = L.layerGroup().addTo(map);
+  const layersOpacity = () => Number(opacity.value) / 100;
+  // The 1963 detail is an alternate view of Kälbergruben-Windloch.
+  const both = ['plan-1985', 'plan-tantal-1979'].map((id) => plans.find((plan) => plan.id === id));
   plans.forEach((plan) => select.add(new Option(plan.title, plan.id)));
+  if (both.every(Boolean)) select.add(new Option('Obie jaskinie', 'both'));
   if (plans.length) select.value = plans[0].id;
+
   function update() {
-    if (planLayer) map.removeLayer(planLayer);
-    planLayer = null;
-    const current = plans.find((plan) => plan.id === select.value);
-    el('opacity').disabled = !current;
-    el('plan-info').hidden = !current;
-    if (!current) return;
-    el('plan-note').textContent = current.note;
-    el('plan-credit').textContent = current.attribution;
-    planLayer = L.imageOverlay(new URL(current.image, dataRoot).href, current.bounds, {
-      pane: 'plans', opacity: Number(el('opacity').value) / 100,
-      alt: current.title, interactive: false
-    }).on('error', () => {
-      el('status').textContent = 'Nie udało się wczytać obrazu planu.';
-      el('status').hidden = false;
-    }).on('load', () => { el('status').hidden = true; }).addTo(map);
+    const selected = select.value === 'both' ? both : plans.filter((plan) => plan.id === select.value);
+    layers.clearLayers();
+    sources.replaceChildren();
+    status.hidden = true;
+    opacity.disabled = selected.length === 0;
+    info.hidden = selected.length === 0;
+    const bounds = L.latLngBounds([]);
+    const failed = new Set();
+    for (const plan of selected) {
+      const layer = L.imageOverlay(new URL(plan.image, dataRoot).href, plan.bounds, {
+        pane: 'plans', opacity: layersOpacity(), alt: plan.title, interactive: false
+      }).on('error', () => {
+        if (!layers.hasLayer(layer)) return;
+        failed.add(plan.title);
+        status.textContent = 'Nie udało się wczytać planów · ' + [...failed].join(', ');
+        status.hidden = false;
+      });
+      layers.addLayer(layer);
+      bounds.extend(layer.getBounds());
+      if (selected.length > 1) sources.append(element('h3', plan.title));
+      sources.append(element('p', plan.note), element('p', plan.attribution));
+    }
+    return bounds;
   }
   select.addEventListener('change', () => {
-    update();
-    if (!planLayer) return;
-    caveBounds = planLayer.getBounds();
+    const bounds = update();
+    if (!bounds.isValid()) return;
+    caveBounds = bounds;
     el('survey-cave').value = '';
     if (map.getSize().x < 800) panelOpen(false);
     frame(caveBounds);
   });
-  el('opacity').addEventListener('input', () => {
-    el('opacity-value').textContent = el('opacity').value + '%';
-    planLayer?.setOpacity(Number(el('opacity').value) / 100);
+  opacity.addEventListener('input', () => {
+    el('opacity-value').textContent = opacity.value + '%';
+    layers.eachLayer((layer) => layer.setOpacity(layersOpacity()));
   });
   update();
 }
@@ -291,6 +380,7 @@ async function load() {
     frame(caveBounds);
   });
   setSearch(gpsLayer.getLayers(), gpsLayer, gpsToggle);
+  el('measure').disabled = false;
   el('status').hidden = true;
 }
 
